@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">Schedule</string>
 
-    <!--ActionBar-->
+    <!--Панель инструментов (ActionBar)-->
     <string name="action_bar_title_schedule">Schedule</string>
     <string name="action_bar_title_about">About</string>
 
-    <!--Menu-->
+    <!--Меню-->
     <string name="menu_item_schedule">Schedule</string>
     <string name="menu_item_about">About</string>
+
+    <!--Экран "Расписание" (ScheduleActivity)-->
+    <string name="title_departure_station">Departure station</string>
+    <string name="title_arrival_station">Arrival station</string>
+    <string name="title_departure_date">Departure date</string>
+    <string name="hint_choose_station">Choose station</string>
+    <string name="hint_region">Region</string>
+    <string name="hint_select_date">Select a date</string>
 </resources>

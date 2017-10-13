@@ -2,10 +2,14 @@ package ru.sergeykamyshov.schedule;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import ru.sergeykamyshov.schedule.fragments.DatePickerFragment;
 
 public class ScheduleActivity extends AppCompatActivity {
 
@@ -33,5 +37,10 @@ public class ScheduleActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDatePickerDialog(View view) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }
