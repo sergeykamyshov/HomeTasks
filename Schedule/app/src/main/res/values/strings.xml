@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Schedule</string>
+
+    <!--ActionBar-->
+    <string name="action_bar_title_schedule">Schedule</string>
+    <string name="action_bar_title_about">About</string>
+
+    <!--Menu-->
+    <string name="menu_item_schedule">Schedule</string>
+    <string name="menu_item_about">About</string>
 </resources>
