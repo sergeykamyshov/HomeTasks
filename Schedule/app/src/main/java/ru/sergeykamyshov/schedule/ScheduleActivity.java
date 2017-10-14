@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import ru.sergeykamyshov.schedule.fragments.DatePickerFragment;
 
@@ -16,6 +18,8 @@ public class ScheduleActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE = 1;
     public static final String LOG_TAG = ScheduleActivity.class.getSimpleName();
+    public static final String REQUEST_PARAM_STATION_NAME = "stationName";
+    public static final String REQUEST_PARAM_STATION_REGION = "stationRegion";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +62,10 @@ public class ScheduleActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE:
-                    data.getStringExtra("stationName");
-                    data.getStringExtra("stationRegion");
+                    EditText departureStation = (EditText) findViewById(R.id.departureStationAddressEditText);
+                    departureStation.setText(data.getStringExtra(REQUEST_PARAM_STATION_NAME));
+                    TextView departureStationRegion = (TextView) findViewById(R.id.departureStationRegionTextView);
+                    departureStationRegion.setText(data.getStringExtra(REQUEST_PARAM_STATION_REGION));
                     break;
                 default:
                     Log.i(LOG_TAG, getString(R.string.error_request_code_not_identified) + requestCode);
