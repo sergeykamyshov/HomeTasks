@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.view.View;
 import ru.sergeykamyshov.schedule.fragments.DatePickerFragment;
 
 public class ScheduleActivity extends AppCompatActivity {
+
+    public static final int REQUEST_CODE = 1;
+    public static final String LOG_TAG = ScheduleActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,35 @@ public class ScheduleActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Обрабатывает нажатие поля "Станция отправления" и вызывает экран списка станций
+     *
+     * @param view - компонент который был нажат
+     */
+    public void chooseDepartureStation(View view) {
+        Intent intent = new Intent(this, StationListActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE:
+                    data.getStringExtra("stationName");
+                    data.getStringExtra("stationRegion");
+                    break;
+                default:
+                    Log.i(LOG_TAG, getString(R.string.error_request_code_not_identified) + requestCode);
+            }
+        }
+    }
+
+    /**
+     * Обрабатывает нажатие поля "Дата отправления" и показывает диалог выбора даты
+     *
+     * @param view - компонент который был нажат
+     */
     public void showDatePickerDialog(View view) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
