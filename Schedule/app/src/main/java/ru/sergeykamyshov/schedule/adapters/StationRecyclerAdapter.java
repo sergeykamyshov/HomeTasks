@@ -5,31 +5,45 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import ru.sergeykamyshov.schedule.R;
+import ru.sergeykamyshov.schedule.models.City;
+import ru.sergeykamyshov.schedule.models.Station;
 
 public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecyclerAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<String> mDataSet;
+    private List<City> mDataSet;
 
-    public StationRecyclerAdapter(Context context, List<String> dataSet) {
+    public StationRecyclerAdapter(Context context, List<City> dataSet) {
         mContext = context;
         mDataSet = dataSet;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.station_list_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.country_city_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mStationTitle.setText(mDataSet.get(position));
+        City city = mDataSet.get(position);
+        // Формирование заголовка категории в формате: "Страна, Город"
+        holder.mCountryCityTitle.setText(city.getCountryTitle() + ", " + city.getCityTitle());
+        // Удаляем все предыдущие станции для категории, чтобы они не добавлялись к другим категориям
+        holder.mStationContainerLayout.removeAllViews();
+        for (Station station : city.getStations()) {
+            View stationLayout = LayoutInflater.from(mContext).inflate(R.layout.station_list_item, holder.mStationContainerLayout, false);
+            TextView stationTitle = stationLayout.findViewById(R.id.stationTitleTextView);
+            stationTitle.setText(station.getStationTitle());
+
+            holder.mStationContainerLayout.addView(stationLayout);
+        }
     }
 
     @Override
@@ -38,11 +52,13 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mStationTitle;
+        public TextView mCountryCityTitle;
+        public LinearLayout mStationContainerLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mStationTitle = itemView.findViewById(R.id.stationTitleTextView);
+            mCountryCityTitle = itemView.findViewById(R.id.countryCityTitleTextView);
+            mStationContainerLayout = itemView.findViewById(R.id.stationsContainerLayout);
         }
     }
 }

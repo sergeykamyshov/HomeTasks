@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.sergeykamyshov.schedule.adapters.StationRecyclerAdapter;
+import ru.sergeykamyshov.schedule.models.City;
+import ru.sergeykamyshov.schedule.utils.QueryUtils;
 
 public class StationListActivity extends AppCompatActivity {
 
@@ -24,14 +25,14 @@ public class StationListActivity extends AppCompatActivity {
             actionBar.setTitle(getString(R.string.action_bar_title_stations));
         }
 
+        // Настраиваем RecyclerView
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.stations_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<String> data = new ArrayList<>();
-        data.add("Item 1");
-        data.add("Item 2");
-        data.add("Item 3");
+        // Получаем данные из json файла
+        List<City> data = QueryUtils.fetchStationDataFromAssetsFile(this);
 
+        // Создаем и устанавливаем адаптер для RecyclerView
         recyclerView.setAdapter(new StationRecyclerAdapter(this, data));
     }
 }
