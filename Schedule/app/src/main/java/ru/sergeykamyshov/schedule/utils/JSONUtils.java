@@ -18,17 +18,9 @@ import java.util.List;
 import ru.sergeykamyshov.schedule.models.City;
 import ru.sergeykamyshov.schedule.models.Station;
 
-public class QueryUtils {
+public class JSONUtils {
 
     public static final String STATIONS_JSON_FILE_LOCATION = "allStations.json";
-
-    public static List<Station> fetchStationDataFromNetwork() {
-        // Получаем данные по сети в формате json
-        // ...
-        // Если версия полученного json больше текущей, то обновляем базу данных (обновление ~ каждые 3 месяца)
-        // ...
-        return null;
-    }
 
     /**
      * Достает данные из json файла через AssetManager и вызывает парсинг данных
@@ -65,6 +57,14 @@ public class QueryUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return stringBuilder.toString();
     }

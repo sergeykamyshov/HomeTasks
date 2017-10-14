@@ -11,7 +11,7 @@ import java.util.List;
 
 import ru.sergeykamyshov.schedule.adapters.StationRecyclerAdapter;
 import ru.sergeykamyshov.schedule.models.City;
-import ru.sergeykamyshov.schedule.utils.QueryUtils;
+import ru.sergeykamyshov.schedule.utils.DBUtils;
 
 public class StationListActivity extends AppCompatActivity {
 
@@ -29,8 +29,8 @@ public class StationListActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.stations_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Получаем данные из json файла
-        List<City> data = QueryUtils.fetchStationDataFromAssetsFile(this);
+        // Получаем данные из базы (или json файла если первый запуск)
+        List<City> data = DBUtils.getStations(this);
 
         // Создаем и устанавливаем адаптер для RecyclerView
         recyclerView.setAdapter(new StationRecyclerAdapter(this, data));

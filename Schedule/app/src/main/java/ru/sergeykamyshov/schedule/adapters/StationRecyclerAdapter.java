@@ -35,7 +35,7 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
         City city = mDataSet.get(position);
         // Формирование заголовка категории в формате: "Страна, Город"
         holder.mCountryCityTitle.setText(city.getCountryTitle() + ", " + city.getCityTitle());
-        // Удаляем все предыдущие станции для категории, чтобы они не добавлялись к другим категориям
+        // Удаляем все станции для предыдущей категории, чтобы они накапливались
         holder.mStationContainerLayout.removeAllViews();
         for (Station station : city.getStations()) {
             View stationLayout = LayoutInflater.from(mContext).inflate(R.layout.station_list_item, holder.mStationContainerLayout, false);
