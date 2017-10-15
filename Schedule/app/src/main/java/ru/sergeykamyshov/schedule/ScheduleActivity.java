@@ -14,12 +14,21 @@ import ru.sergeykamyshov.schedule.fragments.DatePickerFragment;
 
 public class ScheduleActivity extends BaseActivity {
 
+    public static final String LOG_TAG = ScheduleActivity.class.getSimpleName();
+
     public static final int REQUEST_CODE_DEPARTURE = 1;
     public static final int REQUEST_CODE_ARRIVAL = 2;
-    public static final String LOG_TAG = ScheduleActivity.class.getSimpleName();
+
     public static final String REQUEST_PARAM_STATION_NAME = "stationName";
     public static final String REQUEST_PARAM_STATION_REGION = "stationRegion";
+
     public static final String EXTRA_PARAM_DIRECTION_TYPE = "directionType";
+
+    public static final String STATE_DEPARTURE_REGION = "departureStationRegion";
+    public static final String STATE_ARRIVAL_REGION = "arrivalStationRegion";
+
+    private TextView mDepartureStationRegion;
+    private TextView mArrivalStationRegion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +36,13 @@ public class ScheduleActivity extends BaseActivity {
         setContentView(R.layout.activity_schedule);
 
         setActionBarTitle(getString(R.string.action_bar_title_schedule));
+
+        initViews();
+    }
+
+    private void initViews() {
+        mDepartureStationRegion = (TextView) findViewById(R.id.departureStationRegionTextView);
+        mArrivalStationRegion = (TextView) findViewById(R.id.arrivalStationRegionEditText);
     }
 
     @Override
@@ -42,6 +58,20 @@ public class ScheduleActivity extends BaseActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mDepartureStationRegion.setText(savedInstanceState.getString(STATE_DEPARTURE_REGION));
+        mArrivalStationRegion.setText(savedInstanceState.getString(STATE_ARRIVAL_REGION));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(STATE_DEPARTURE_REGION, String.valueOf(mDepartureStationRegion.getText()));
+        outState.putString(STATE_ARRIVAL_REGION, String.valueOf(mArrivalStationRegion.getText()));
     }
 
     /**
@@ -73,14 +103,12 @@ public class ScheduleActivity extends BaseActivity {
                 case REQUEST_CODE_DEPARTURE:
                     EditText departureStation = (EditText) findViewById(R.id.departureStationAddressEditText);
                     departureStation.setText(data.getStringExtra(REQUEST_PARAM_STATION_NAME));
-                    TextView departureStationRegion = (TextView) findViewById(R.id.departureStationRegionTextView);
-                    departureStationRegion.setText(data.getStringExtra(REQUEST_PARAM_STATION_REGION));
+                    mDepartureStationRegion.setText(data.getStringExtra(REQUEST_PARAM_STATION_REGION));
                     break;
                 case REQUEST_CODE_ARRIVAL:
                     EditText arrivalStation = (EditText) findViewById(R.id.arrivalStationAddressEditText);
                     arrivalStation.setText(data.getStringExtra(REQUEST_PARAM_STATION_NAME));
-                    TextView arrivalStationRegion = (TextView) findViewById(R.id.arrivalStationRegionEditText);
-                    arrivalStationRegion.setText(data.getStringExtra(REQUEST_PARAM_STATION_REGION));
+                    mArrivalStationRegion.setText(data.getStringExtra(REQUEST_PARAM_STATION_REGION));
                     break;
                 default:
                     Log.i(LOG_TAG, getString(R.string.error_request_code_not_identified) + requestCode);
