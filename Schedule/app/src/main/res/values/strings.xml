@@ -10,6 +10,7 @@
     <!--Меню-->
     <string name="menu_item_schedule">Schedule</string>
     <string name="menu_item_about">About</string>
+    <string name="menu_item_search">Search</string>
 
     <!--Экран "Расписание" (ScheduleActivity)-->
     <string name="title_departure_station">Departure station</string>
