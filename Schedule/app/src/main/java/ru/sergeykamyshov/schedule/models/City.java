@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class City {
 
+    private String mDirection;
     private String mCountryTitle;
     private String mCityTitle;
     private List<Station> mStations;
@@ -15,6 +16,21 @@ public class City {
         mCountryTitle = countryTitle;
         mCityTitle = cityTitle;
         mStations = stations;
+    }
+
+    public City(String direction, String countryTitle, String cityTitle, List<Station> stations) {
+        mDirection = direction;
+        mCountryTitle = countryTitle;
+        mCityTitle = cityTitle;
+        mStations = stations;
+    }
+
+    public String getDirection() {
+        return mDirection;
+    }
+
+    public void setDirection(String direction) {
+        mDirection = direction;
     }
 
     public String getCountryTitle() {

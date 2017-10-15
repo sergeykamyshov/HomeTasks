@@ -2,6 +2,7 @@ package ru.sergeykamyshov.schedule.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -13,20 +14,28 @@ import ru.sergeykamyshov.schedule.database.StationSchema;
 import ru.sergeykamyshov.schedule.models.City;
 import ru.sergeykamyshov.schedule.models.Station;
 
+import static ru.sergeykamyshov.schedule.database.StationSchema.Cols.COLUMN_DIRECTION_TYPE;
+
 public class DBUtils {
 
-    public static List<City> getStations(Context context) {
+    public static final String PREFERENCES_FILENAME = "db_preferences";
+    public static final String PREFERENCES_IS_FIRST_LOAD = "isFirstLoad";
+
+    public static List<City> getStations(Context context, String directionType) {
         List<City> stations;
-        // TODO: добавить параметр куда-то
-        // Если параметр включен, то обновляем данные из json файла
-        if (false) {
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILENAME, Context.MODE_PRIVATE);
+        // При первом запуске необходимо обновить базу из json файла
+        if (preferences.getBoolean(PREFERENCES_IS_FIRST_LOAD, true)) {
+            // TODO: при первом запуске в списке будут все станции. Необходимо отобрать только нужные
             // Парсим данные из json файла
             stations = JSONUtils.fetchStationDataFromAssetsFile(context);
             // Сохраняем данные в базу
             writeStationsToDB(context, stations);
+            // Устанавливаем флаг, что первый запуст успешно завершился
+            preferences.edit().putBoolean(PREFERENCES_IS_FIRST_LOAD, false).apply();
         } else {
             // Получаем данные из базы
-            stations = readStationsFromDB(context);
+            stations = readStationsFromDB(context, directionType);
         }
         return stations;
     }
@@ -42,6 +51,7 @@ public class DBUtils {
             List<Station> stations = city.getStations();
             for (Station station : stations) {
                 ContentValues values = new ContentValues();
+                values.put(COLUMN_DIRECTION_TYPE, city.getDirection());
                 values.put(StationSchema.Cols.COLUMN_COUNTRY_TITLE, city.getCountryTitle());
                 values.put(StationSchema.Cols.COLUMN_CITY_TITLE, city.getCityTitle());
                 values.put(StationSchema.Cols.COLUMN_STATION_TITLE, station.getStationTitle());
@@ -54,12 +64,14 @@ public class DBUtils {
         db.close();
     }
 
-    public static List<City> readStationsFromDB(Context context) {
+    public static List<City> readStationsFromDB(Context context, String directionType) {
         List<City> cities = new ArrayList<>();
 
         DBHelper helper = new DBHelper(context);
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.query(StationSchema.TABLE_NAME, null, null, null, null, null, null);
+        // Делаем выборку по типу направления. Тип передается параметром интента при переходе на StationListActivity
+        Cursor cursor = db.query(StationSchema.TABLE_NAME, null,
+                StationSchema.Cols.COLUMN_DIRECTION_TYPE + " = ?", new String[]{directionType}, null, null, null);
 
         if (cursor.moveToFirst()) {
             // Вычисляем индексы полей только один раз

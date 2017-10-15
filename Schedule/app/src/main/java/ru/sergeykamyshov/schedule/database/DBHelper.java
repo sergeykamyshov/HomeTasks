@@ -12,6 +12,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_TABLE = "CREATE TABLE " + StationSchema.TABLE_NAME + " (" +
             StationSchema._ID + " INTEGER PRIMARY KEY, " +
+            StationSchema.Cols.COLUMN_DIRECTION_TYPE + " TEXT, " +
             StationSchema.Cols.COLUMN_COUNTRY_TITLE + " TEXT, " +
             StationSchema.Cols.COLUMN_CITY_TITLE + " TEXT, " +
             StationSchema.Cols.COLUMN_STATION_TITLE + " TEXT, " +

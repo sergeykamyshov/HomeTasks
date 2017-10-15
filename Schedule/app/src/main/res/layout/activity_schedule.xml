@@ -76,6 +76,7 @@
         android:focusable="false"
         android:hint="@string/hint_choose_station"
         android:inputType="textPersonName"
+        android:onClick="chooseArrivalStation"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

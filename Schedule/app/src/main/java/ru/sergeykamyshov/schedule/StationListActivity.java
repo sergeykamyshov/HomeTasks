@@ -1,9 +1,8 @@
 package ru.sergeykamyshov.schedule;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,10 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.sergeykamyshov.schedule.adapters.StationRecyclerAdapter;
-import ru.sergeykamyshov.schedule.loaders.StationLoader;
 import ru.sergeykamyshov.schedule.models.City;
-
-import static ru.sergeykamyshov.schedule.loaders.StationLoader.STATION_LOADER_ID;
+import ru.sergeykamyshov.schedule.utils.DBUtils;
 
 public class StationListActivity extends BaseActivity {
 
@@ -44,7 +41,8 @@ public class StationListActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         // Инициируем работу Loader'a, который достанет нам данные из базы или json файла (если это первый запуск после обновления)
-        getSupportLoaderManager().initLoader(STATION_LOADER_ID, null, mLoaderCallbacks);
+//        getSupportLoaderManager().initLoader(STATION_LOADER_ID, null, mLoaderCallbacks);
+        new StationAsyncTask().execute("from");
     }
 
     @Override
@@ -71,14 +69,16 @@ public class StationListActivity extends BaseActivity {
         return true;
     }
 
-    private LoaderManager.LoaderCallbacks<List<City>> mLoaderCallbacks = new LoaderManager.LoaderCallbacks<List<City>>() {
+    private class StationAsyncTask extends AsyncTask<String, Void, List<City>> {
+
         @Override
-        public Loader<List<City>> onCreateLoader(int id, Bundle args) {
-            return new StationLoader(getApplicationContext());
+        protected List<City> doInBackground(String... params) {
+            // В params[0] передается тип направления, по которому будет сделана выборка в базе
+            return DBUtils.getStations(getApplicationContext(), params[0]);
         }
 
         @Override
-        public void onLoadFinished(Loader<List<City>> loader, List<City> data) {
+        protected void onPostExecute(List<City> data) {
             // Скрываем ProgressBar после выполнения возвращения результата от loader'а
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.bar_progress);
             progressBar.setVisibility(View.GONE);
@@ -91,11 +91,5 @@ public class StationListActivity extends BaseActivity {
                 emptyList.setVisibility(View.VISIBLE);
             }
         }
-
-        @Override
-        public void onLoaderReset(Loader<List<City>> loader) {
-            mAdapter.setDataSet(new ArrayList<City>());
-            mAdapter.notifyDataSetChanged();
-        }
-    };
+    }
 }

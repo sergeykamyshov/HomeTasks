@@ -82,25 +82,37 @@ public class JSONUtils {
         }
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
-            JSONArray citiesFromArray = jsonObject.getJSONArray("citiesFrom");
-            for (int i = 0; i < citiesFromArray.length(); i++) {
-                JSONObject city = (JSONObject) citiesFromArray.get(i);
-                String countryTitle = city.getString("countryTitle");
-                String cityTitle = city.getString("cityTitle");
-
-                JSONArray stationsArray = city.getJSONArray("stations");
-                List<Station> cityStations = new ArrayList<>();
-                for (int j = 0; j < stationsArray.length(); j++) {
-                    JSONObject cityStation = (JSONObject) stationsArray.get(j);
-                    Station station = new Station(cityStation.getString("stationTitle"), cityStation.getString("cityTitle"), cityStation.getString("districtTitle"));
-                    cityStations.add(station);
-                }
-
-                cities.add(new City(countryTitle, cityTitle, cityStations));
-            }
+            parseAndFillCitiesList(cities, jsonObject.getJSONArray("citiesFrom"), "from");
+            parseAndFillCitiesList(cities, jsonObject.getJSONArray("citiesTo"), "to");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return cities;
+    }
+
+    /**
+     * Заполняет список городов из переданного массива json объектов
+     *
+     * @param cities      - список городов
+     * @param citiesArray - массив городов в формате json
+     * @param direction   - признак направления
+     * @throws JSONException
+     */
+    private static void parseAndFillCitiesList(List<City> cities, JSONArray citiesArray, String direction) throws JSONException {
+        for (int i = 0; i < citiesArray.length(); i++) {
+            JSONObject city = (JSONObject) citiesArray.get(i);
+            String countryTitle = city.getString("countryTitle");
+            String cityTitle = city.getString("cityTitle");
+
+            JSONArray stationsArray = city.getJSONArray("stations");
+            List<Station> cityStations = new ArrayList<>();
+            for (int j = 0; j < stationsArray.length(); j++) {
+                JSONObject cityStation = (JSONObject) stationsArray.get(j);
+                Station station = new Station(cityStation.getString("stationTitle"), cityStation.getString("cityTitle"), cityStation.getString("districtTitle"));
+                cityStations.add(station);
+            }
+
+            cities.add(new City(direction, countryTitle, cityTitle, cityStations));
+        }
     }
 }
