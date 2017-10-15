@@ -5,6 +5,7 @@
     <string name="action_bar_title_schedule">Schedule</string>
     <string name="action_bar_title_about">About</string>
     <string name="action_bar_title_stations">Stations</string>
+    <string name="action_bar_title_station_detail">Station detail</string>
 
     <!--Меню-->
     <string name="menu_item_schedule">Schedule</string>
@@ -17,6 +18,13 @@
     <string name="hint_choose_station">Choose station</string>
     <string name="hint_region">Region</string>
     <string name="hint_select_date">Select a date</string>
+
+    <!--Экран "Подробно о станции"-->
+    <string name="detail_stantion_title">Stantion</string>
+    <string name="detail_address_title">Address</string>
+    <string name="detail_city_title">City</string>
+    <string name="detail_district_title">District</string>
+    <string name="detail_country_title">Country</string>
 
     <!--Сообщения об ошибках-->
     <string name="error_request_code_not_identified">Request code not identified: </string>

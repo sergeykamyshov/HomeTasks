@@ -3,8 +3,6 @@ package ru.sergeykamyshov.schedule;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +12,7 @@ import android.widget.TextView;
 
 import ru.sergeykamyshov.schedule.fragments.DatePickerFragment;
 
-public class ScheduleActivity extends AppCompatActivity {
+public class ScheduleActivity extends BaseActivity {
 
     public static final int REQUEST_CODE = 1;
     public static final String LOG_TAG = ScheduleActivity.class.getSimpleName();
@@ -26,10 +24,7 @@ public class ScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(getString(R.string.action_bar_title_schedule));
-        }
+        setActionBarTitle(getString(R.string.action_bar_title_schedule));
     }
 
     @Override

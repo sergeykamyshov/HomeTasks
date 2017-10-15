@@ -13,5 +13,7 @@ public class StationSchema implements BaseColumns {
         public static final String COLUMN_COUNTRY_TITLE = "country_title";
         public static final String COLUMN_CITY_TITLE = "city_title";
         public static final String COLUMN_STATION_TITLE = "station_title";
+        public static final String COLUMN_FULL_CITY_TITLE = "full_city_title";
+        public static final String COLUMN_DISTRICT_TITLE = "district_title";
     }
 }

@@ -63,6 +63,8 @@ public class DBUtils {
             int countryColumnIndex = cursor.getColumnIndex(StationSchema.Cols.COLUMN_COUNTRY_TITLE);
             int cityColumnIndex = cursor.getColumnIndex(StationSchema.Cols.COLUMN_CITY_TITLE);
             int stationColumnIndex = cursor.getColumnIndex(StationSchema.Cols.COLUMN_STATION_TITLE);
+            int fullCityColumnIndex = cursor.getColumnIndex(StationSchema.Cols.COLUMN_FULL_CITY_TITLE);
+            int districtColumnIndex = cursor.getColumnIndex(StationSchema.Cols.COLUMN_DISTRICT_TITLE);
 
             do {
                 String countryTitle = cursor.getString(countryColumnIndex);
@@ -70,18 +72,18 @@ public class DBUtils {
                 // Если список пуст, то добавляем первый город с текущей станцией
                 if (cities.isEmpty()) {
                     List<Station> cityStations = new ArrayList<>();
-                    cityStations.add(new Station(cursor.getString(stationColumnIndex)));
+                    cityStations.add(new Station(cursor.getString(stationColumnIndex), cursor.getString(fullCityColumnIndex), cursor.getString(districtColumnIndex)));
                     cities.add(new City(countryTitle, cityTitle, cityStations));
                 } else {
                     // Получаем последний добавленный город
                     City lastAddedCity = cities.get(cities.size() - 1);
                     // Если станция находится в последнем добавленом городе, то добавляем ее в тот же список
                     if (lastAddedCity.getCountryTitle().equals(countryTitle) && lastAddedCity.getCityTitle().equals(cityTitle)) {
-                        lastAddedCity.getStations().add(new Station(cursor.getString(stationColumnIndex)));
+                        lastAddedCity.getStations().add(new Station(cursor.getString(stationColumnIndex), cursor.getString(fullCityColumnIndex), cursor.getString(districtColumnIndex)));
                     } else {
-                        // Добавляем новый город с текущей станцией
+                        // Создаем новый город с текущей станцией
                         List<Station> cityStations = new ArrayList<>();
-                        cityStations.add(new Station(cursor.getString(stationColumnIndex)));
+                        cityStations.add(new Station(cursor.getString(stationColumnIndex), cursor.getString(fullCityColumnIndex), cursor.getString(districtColumnIndex)));
                         cities.add(new City(countryTitle, cityTitle, cityStations));
                     }
                 }

@@ -15,6 +15,8 @@ public class DBHelper extends SQLiteOpenHelper {
             StationSchema.Cols.COLUMN_COUNTRY_TITLE + " TEXT, " +
             StationSchema.Cols.COLUMN_CITY_TITLE + " TEXT, " +
             StationSchema.Cols.COLUMN_STATION_TITLE + " TEXT" +
+            StationSchema.Cols.COLUMN_FULL_CITY_TITLE + " TEXT" +
+            StationSchema.Cols.COLUMN_DISTRICT_TITLE + " TEXT" +
             ")";
 
     public DBHelper(Context context) {

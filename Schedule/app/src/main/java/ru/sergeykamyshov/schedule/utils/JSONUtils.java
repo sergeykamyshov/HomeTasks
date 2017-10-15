@@ -92,7 +92,8 @@ public class JSONUtils {
                 List<Station> cityStations = new ArrayList<>();
                 for (int j = 0; j < stationsArray.length(); j++) {
                     JSONObject cityStation = (JSONObject) stationsArray.get(j);
-                    Station station = new Station(cityStation.getString("stationTitle"));
+                    Station station = new Station(cityStation.getString("stationTitle"),
+                            cityStation.getString("cityTitle"), cityStation.getString("districtTitle"));
                     cityStations.add(station);
                 }
 
