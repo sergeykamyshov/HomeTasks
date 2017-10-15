@@ -6,6 +6,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +48,16 @@ public class StationListActivity extends BaseActivity implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<List<City>> loader, List<City> data) {
+        // Скрываем ProgressBar после выполнения loader'а
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.bar_progress);
+        progressBar.setVisibility(View.GONE);
         if (data != null && !data.isEmpty()) {
             mAdapter.setDataSet(data);
             mAdapter.notifyDataSetChanged();
+        } else {
+            // Если список пуст, то необходимо вывести информацию об этом
+            TextView emptyList = (TextView) findViewById(R.id.text_empty_station_list);
+            emptyList.setVisibility(View.VISIBLE);
         }
     }
 

@@ -32,4 +32,7 @@
 
     <!--Сообщения об ошибках-->
     <string name="error_request_code_not_identified">Request code not identified: </string>
+
+    <!--Другие сообщения-->
+    <string name="msg_empty_list">List is empty</string>
 </resources>

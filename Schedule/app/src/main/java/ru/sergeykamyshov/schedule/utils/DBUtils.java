@@ -17,12 +17,15 @@ public class DBUtils {
 
     public static List<City> getStations(Context context) {
         List<City> stations;
-        // TODO: добавить проверку на необходимость парсинга из json при первом запуске
-        if (true) {
+        // TODO: добавить параметр куда-то
+        // Если параметр включен, то обновляем данные из json файла
+        if (false) {
+            // Парсим данные из json файла
             stations = JSONUtils.fetchStationDataFromAssetsFile(context);
-            // TODO: move into thread
+            // Сохраняем данные в базу
             writeStationsToDB(context, stations);
         } else {
+            // Получаем данные из базы
             stations = readStationsFromDB(context);
         }
         return stations;
