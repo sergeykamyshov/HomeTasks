@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+/**
+ * Класс отвечает за обработку на экране "О приложении"
+ */
 public class AboutActivity extends BaseActivity {
 
     @Override
@@ -14,6 +18,9 @@ public class AboutActivity extends BaseActivity {
         setContentView(R.layout.activity_about);
 
         setActionBarTitle(getString(R.string.action_bar_title_about));
+
+        TextView version = (TextView) findViewById(R.id.text_version_name);
+        version.setText(version.getText() + BuildConfig.VERSION_NAME);
     }
 
     @Override

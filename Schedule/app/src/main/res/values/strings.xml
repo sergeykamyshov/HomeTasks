@@ -26,6 +26,10 @@
     <string name="detail_district_title">District</string>
     <string name="detail_country_title">Country</string>
 
+    <!--Экран "О приложении"-->
+    <string name="about_version">version: </string>
+    <string name="about_copyright">2017, Sergey Kamyshov. All right reserved</string>
+
     <!--Сообщения об ошибках-->
     <string name="error_request_code_not_identified">Request code not identified: </string>
 </resources>
