@@ -1,6 +1,5 @@
 package ru.sergeykamyshov.schedule.utils;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -19,8 +18,8 @@ public class DBUtils {
     public static List<City> getStations(Context context) {
         List<City> stations;
         // TODO: добавить проверку на необходимость парсинга из json при первом запуске
-        if (false) {
-            stations = JSONUtils.fetchStationDataFromAssetsFile((Activity) context);
+        if (true) {
+            stations = JSONUtils.fetchStationDataFromAssetsFile(context);
             // TODO: move into thread
             writeStationsToDB(context, stations);
         } else {
@@ -43,7 +42,8 @@ public class DBUtils {
                 values.put(StationSchema.Cols.COLUMN_COUNTRY_TITLE, city.getCountryTitle());
                 values.put(StationSchema.Cols.COLUMN_CITY_TITLE, city.getCityTitle());
                 values.put(StationSchema.Cols.COLUMN_STATION_TITLE, station.getStationTitle());
-
+                values.put(StationSchema.Cols.COLUMN_FULL_CITY_TITLE, station.getFullCityTitle());
+                values.put(StationSchema.Cols.COLUMN_DISTRICT_TITLE, station.getDistrictTitle());
                 // Каждую запись, каждого города, добавляем в БД
                 db.insert(StationSchema.TABLE_NAME, null, values);
             }

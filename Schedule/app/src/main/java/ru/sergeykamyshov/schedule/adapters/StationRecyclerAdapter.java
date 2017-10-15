@@ -61,7 +61,7 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, StationDetailActivity.class);
                     intent.putExtra(PARAM_STATION_TITLE, station.getStationTitle());
-                    intent.putExtra(PARAM_CITY_TITLE, station.getFullCityTitle());
+                    intent.putExtra(PARAM_CITY_TITLE, station.getFullCityTitle() != null ? station.getFullCityTitle() : city.getCityTitle());
                     intent.putExtra(PARAM_DISTRICT_TITLE, station.getDistrictTitle());
                     intent.putExtra(PARAM_COUNTRY_TITLE, city.getCountryTitle());
                     mContext.startActivity(intent);
@@ -98,5 +98,9 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
             mCountryCityTitle = itemView.findViewById(R.id.countryCityTitleTextView);
             mStationContainerLayout = itemView.findViewById(R.id.stationsContainerLayout);
         }
+    }
+
+    public void setDataSet(List<City> dataSet) {
+        mDataSet = dataSet;
     }
 }

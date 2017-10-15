@@ -1,6 +1,6 @@
 package ru.sergeykamyshov.schedule.utils;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 
 import org.json.JSONArray;
@@ -25,11 +25,11 @@ public class JSONUtils {
     /**
      * Достает данные из json файла через AssetManager и вызывает парсинг данных
      *
-     * @param activity - activity списка, необходима для использования AssetManager
+     * @param context - context списка, необходима для использования AssetManager
      * @return список городов со списком станций
      */
-    public static List<City> fetchStationDataFromAssetsFile(Activity activity) {
-        AssetManager assets = activity.getAssets();
+    public static List<City> fetchStationDataFromAssetsFile(Context context) {
+        AssetManager assets = context.getAssets();
         String jsonString;
         try {
             InputStream inputStream = assets.open(STATIONS_JSON_FILE_LOCATION);
@@ -92,8 +92,7 @@ public class JSONUtils {
                 List<Station> cityStations = new ArrayList<>();
                 for (int j = 0; j < stationsArray.length(); j++) {
                     JSONObject cityStation = (JSONObject) stationsArray.get(j);
-                    Station station = new Station(cityStation.getString("stationTitle"),
-                            cityStation.getString("cityTitle"), cityStation.getString("districtTitle"));
+                    Station station = new Station(cityStation.getString("stationTitle"), cityStation.getString("cityTitle"), cityStation.getString("districtTitle"));
                     cityStations.add(station);
                 }
 

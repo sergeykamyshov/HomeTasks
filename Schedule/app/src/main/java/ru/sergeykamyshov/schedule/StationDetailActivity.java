@@ -24,14 +24,14 @@ public class StationDetailActivity extends BaseActivity {
         city.setText(intent.getStringExtra(PARAM_CITY_TITLE));
 
         // Регион необязательно поле, если оно не заполнено, то скрываем его на визуальной форме
-        if (intent.getStringExtra(PARAM_DISTRICT_TITLE) != null) {
-            TextView district = (TextView) findViewById(R.id.text_district);
-            district.setText(intent.getStringExtra(PARAM_DISTRICT_TITLE));
-        } else {
+        if (intent.getStringExtra(PARAM_DISTRICT_TITLE) == null || intent.getStringExtra(PARAM_DISTRICT_TITLE).isEmpty()) {
             TextView districtTitle = (TextView) findViewById(R.id.text_district_title);
             districtTitle.setVisibility(View.GONE);
             TextView district = (TextView) findViewById(R.id.text_district);
             district.setVisibility(View.GONE);
+        } else {
+            TextView district = (TextView) findViewById(R.id.text_district);
+            district.setText(intent.getStringExtra(PARAM_DISTRICT_TITLE));
         }
 
         TextView country = (TextView) findViewById(R.id.text_country);
