@@ -14,6 +14,7 @@ public class StationDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_station_detail);
 
         setActionBarTitle(getString(R.string.action_bar_title_station_detail));
+        enableToolbarBackButton();
 
         Intent intent = getIntent();
 

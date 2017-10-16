@@ -19,4 +19,17 @@ public class BaseActivity extends AppCompatActivity {
             actionBar.setTitle(title);
         }
     }
+
+    public void enableToolbarBackButton() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 }

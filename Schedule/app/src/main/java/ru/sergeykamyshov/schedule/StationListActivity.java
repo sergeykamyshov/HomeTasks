@@ -31,10 +31,10 @@ public class StationListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_station_list);
 
-        // Подготавливаем Toolbar необоходим для размещения на нем поиска
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.action_bar_title_stations));
+        enableToolbarBackButton();
 
         // Подготавливаем RecyclerView
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.stations_recycler_view);
@@ -53,7 +53,6 @@ public class StationListActivity extends BaseActivity {
 
         MenuItem search = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) search.getActionView();
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -71,6 +70,9 @@ public class StationListActivity extends BaseActivity {
         return true;
     }
 
+    /**
+     * Класс запускает загрузку данных в фоновом потоке. После выполнения обновляет данные адаптера
+     */
     private class StationAsyncTask extends AsyncTask<String, Void, List<City>> {
 
         @Override
