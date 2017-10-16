@@ -20,7 +20,7 @@ public class AboutActivity extends BaseActivity {
         setActionBarTitle(getString(R.string.action_bar_title_about));
 
         TextView version = (TextView) findViewById(R.id.text_version_name);
-        version.setText(version.getText() + BuildConfig.VERSION_NAME);
+        version.append(BuildConfig.VERSION_NAME);
     }
 
     @Override

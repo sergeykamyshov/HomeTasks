@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,40 +21,62 @@ public class DBUtils {
     public static final String PREFERENCES_FILENAME = "db_preferences";
     public static final String PREFERENCES_IS_FIRST_LOAD = "isFirstLoad";
 
-    public static final String LOG_TAG = DBUtils.class.getSimpleName();
-    public static final String LOG_TAG_BACKGROUND_THREAD = DBUtils.class.getSimpleName() + " (Runnable)";
-
+    /**
+     * Возвращает список городов со станциями. При первом запуске приложения данные будут парситься
+     * из json файла и сохраняться в базу. Последующие запуски будут читать данные прямо из базы.
+     *
+     * @param context       - контекст для доступа к ресурсам
+     * @param directionType - тип направления станций
+     * @return список городов со станциями запрашиваемого направления
+     */
     public static List<City> getStations(final Context context, String directionType) {
-        final List<City> stations;
+        List<City> stations;
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILENAME, Context.MODE_PRIVATE);
         // При первом запуске необходимо обновить базу из json файла
         if (preferences.getBoolean(PREFERENCES_IS_FIRST_LOAD, true)) {
-            Log.i(LOG_TAG, "SharedPreferences parameter \"isFirstLoad\"=true. Update database from JSON file");
-            // TODO: при первом запуске в списке будут все станции. Необходимо отобрать только нужные
-            Log.i(LOG_TAG, "Start to parse JSON file");
             // Парсим данные из json файла
-            stations = JSONUtils.fetchStationDataFromAssetsFile(context);
-            Log.i(LOG_TAG, "Run new background thread for database updade");
-            // Сохраняем данные в базу
+            final List<City> allStations = JSONUtils.fetchStationDataFromAssetsFile(context);
+            // Отбирает только данные с направлением, которые мы запрашивали
+            stations = getStationsByDirection(allStations, directionType);
+            // Сохраняем полный список данных в базу в отдельном потоке, чтобы не мешать пользователю
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i(LOG_TAG_BACKGROUND_THREAD, "Start to update database");
-                    writeStationsToDB(context, stations);
-                    Log.i(LOG_TAG_BACKGROUND_THREAD, "Finish to update database");
+                    writeStationsToDB(context, allStations);
                 }
             }).start();
-            Log.i(LOG_TAG, "Set SharedPreferences parameter \"isFirstLoad\"=false (don't need to update database)");
-            // Устанавливаем флаг, что первый запуст успешно завершился
+            // Устанавливаем флаг, что первый запуск успешно завершился
             preferences.edit().putBoolean(PREFERENCES_IS_FIRST_LOAD, false).apply();
         } else {
-            Log.i(LOG_TAG, "Read station list from database with direction: " + directionType);
             // Получаем данные из базы
             stations = readStationsFromDB(context, directionType);
         }
         return stations;
     }
 
+    /**
+     * Возвращает список городов со станциями указанного направления
+     *
+     * @param allStations   - полный список городов со станциями
+     * @param directionType - тип направления станций
+     * @return список городов со станциями запрашиваемого направления
+     */
+    private static List<City> getStationsByDirection(List<City> allStations, String directionType) {
+        List<City> stations = new ArrayList<>();
+        for (City city : allStations) {
+            if (directionType.equals(city.getDirection())) {
+                stations.add(city);
+            }
+        }
+        return stations;
+    }
+
+    /**
+     * Записывает полученные станции городов в таблицу. Очищает предыдущие данные в таблице
+     *
+     * @param context - контекст для подключения к базе данных
+     * @param cities  - список городов со станциями
+     */
     public static void writeStationsToDB(Context context, List<City> cities) {
         DBHelper helper = new DBHelper(context);
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -64,8 +85,7 @@ public class DBUtils {
         db.execSQL("DELETE FROM " + StationSchema.TABLE_NAME);
 
         for (City city : cities) {
-            List<Station> stations = city.getStations();
-            for (Station station : stations) {
+            for (Station station : city.getStations()) {
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_DIRECTION_TYPE, city.getDirection());
                 values.put(StationSchema.Cols.COLUMN_COUNTRY_TITLE, city.getCountryTitle());
@@ -80,6 +100,13 @@ public class DBUtils {
         db.close();
     }
 
+    /**
+     * Возврщает список городов со станциями из базы данных по переданному типу направления
+     *
+     * @param context       - контекст для подключения к базе данных
+     * @param directionType - тип направления станций
+     * @return список городов со станциями запрашиваемого направления
+     */
     public static List<City> readStationsFromDB(Context context, String directionType) {
         List<City> cities = new ArrayList<>();
 
