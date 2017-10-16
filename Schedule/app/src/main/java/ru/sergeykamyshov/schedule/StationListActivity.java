@@ -20,6 +20,8 @@ import ru.sergeykamyshov.schedule.adapters.StationRecyclerAdapter;
 import ru.sergeykamyshov.schedule.models.City;
 import ru.sergeykamyshov.schedule.utils.DBUtils;
 
+import static ru.sergeykamyshov.schedule.ScheduleActivity.EXTRA_PARAM_DIRECTION_TYPE;
+
 public class StationListActivity extends BaseActivity {
 
     private StationRecyclerAdapter mAdapter;
@@ -40,9 +42,9 @@ public class StationListActivity extends BaseActivity {
         mAdapter = new StationRecyclerAdapter(this, new ArrayList<City>());
         recyclerView.setAdapter(mAdapter);
 
-        // Инициируем работу Loader'a, который достанет нам данные из базы или json файла (если это первый запуск после обновления)
-//        getSupportLoaderManager().initLoader(STATION_LOADER_ID, null, mLoaderCallbacks);
-        new StationAsyncTask().execute("from");
+        // Будем загружать только тот список, который запрашивают ("from" или "to")
+        String directionTypeParam = getIntent().getStringExtra(EXTRA_PARAM_DIRECTION_TYPE);
+        new StationAsyncTask().execute(directionTypeParam);
     }
 
     @Override
