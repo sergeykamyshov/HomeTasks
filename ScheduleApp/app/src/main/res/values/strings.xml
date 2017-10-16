@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">Schedule App</string>
-
-    <!--DrawerLayout - выдвижная панель-->
-    <string name="menu_item_schedule">Schedule</string>
-    <string name="menu_item_about">About</string>
-</resources>

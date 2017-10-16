@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Расписание</string>
+
+    <!--Панель инструментов (ActionBar)-->
+    <string name="action_bar_title_about">О приложении</string>
+    <string name="action_bar_title_schedule">Расписание</string>
+    <string name="action_bar_title_station_detail">Подробно о станции</string>
+    <string name="action_bar_title_stations">Станции</string>
+
+    <!--Меню-->
+    <string name="menu_item_about">О приложении</string>
+    <string name="menu_item_schedule">Расписание</string>
+    <string name="menu_item_search">Поиск</string>
+
+    <!--Экран "Расписание" (ScheduleActivity)-->
+    <string name="title_arrival_station">Станция прибытия</string>
+    <string name="title_departure_date">Дата отправления</string>
+    <string name="title_departure_station">Станция отправления</string>
+    <string name="hint_choose_station">Выбрать станцию</string>
+    <string name="hint_region">Регион</string>
+    <string name="hint_select_date">Выбрать дату</string>
+
+    <!--Экран "Подробно о станции"-->
+    <string name="detail_address_title">Адрес</string>
+    <string name="detail_city_title">Город</string>
+    <string name="detail_country_title">Страна</string>
+    <string name="detail_district_title">Регион</string>
+    <string name="detail_stantion_title">Станция</string>
+
+    <!--Экран "О приложении"-->
+    <string name="about_copyright">2017, Сергей Камышов. Все права защищены</string>
+    <string name="about_version">"версия: "</string>
+
+    <!--Другие сообщения-->
+    <string name="msg_empty_list">Список пуст</string>
+</resources>
