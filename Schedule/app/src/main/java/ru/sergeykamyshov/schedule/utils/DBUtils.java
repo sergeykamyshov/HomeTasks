@@ -21,8 +21,20 @@ import static ru.sergeykamyshov.schedule.database.StationSchema.Cols.COLUMN_DIRE
  */
 public class DBUtils {
 
+    /**
+     * Наименование файла SharedPreferences
+     */
     public static final String PREFERENCES_FILENAME = "db_preferences";
-    public static final String PREFERENCES_IS_FIRST_LOAD = "isFirstLoad";
+    /**
+     * Флаг необходимости обновления. Если true, то данные будут парситься из json файла и сохраняться в БД,
+     * если false, то данные будут только читаться из БД
+     */
+    public static final String PREFERENCES_NEED_UPDATE = "need_update";
+    /**
+     * Флаг завершения обновления БД. Если true, то можно запускать еще одно обновление БД,
+     * если false, то запрос на обновление будет проигнорирован
+     */
+    public static final String PREFERENCES_UPDATE_COMPLETED = "update_completed";
 
     /**
      * Возвращает список городов со станциями. При первом запуске приложения данные будут парситься
@@ -36,7 +48,7 @@ public class DBUtils {
         List<City> stations;
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILENAME, Context.MODE_PRIVATE);
         // При первом запуске необходимо обновить базу из json файла
-        if (preferences.getBoolean(PREFERENCES_IS_FIRST_LOAD, true)) {
+        if (preferences.getBoolean(PREFERENCES_NEED_UPDATE, true)) {
             // Парсим данные из json файла
             final List<City> allStations = JSONUtils.fetchStationDataFromAssetsFile(context);
             // Отбирает только данные с направлением, которые мы запрашивали
@@ -48,8 +60,8 @@ public class DBUtils {
                     writeStationsToDB(context, allStations);
                 }
             }).start();
-            // Устанавливаем флаг, что первый запуск успешно завершился
-            preferences.edit().putBoolean(PREFERENCES_IS_FIRST_LOAD, false).apply();
+            // Устанавливаем флаг, что данные получены и обновление пока не требуется
+            preferences.edit().putBoolean(PREFERENCES_NEED_UPDATE, false).apply();
         } else {
             // Получаем данные из базы
             stations = readStationsFromDB(context, directionType);
@@ -81,12 +93,14 @@ public class DBUtils {
      * @param cities  - список городов со станциями
      */
     public static void writeStationsToDB(Context context, List<City> cities) {
+        // Устанавливаем флаг, что обновление базы данных не закончилось, т.к. оно только началось
+        SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILENAME, Context.MODE_PRIVATE);
+        preferences.edit().putBoolean(PREFERENCES_UPDATE_COMPLETED, false).apply();
+
         DBHelper helper = new DBHelper(context);
         SQLiteDatabase db = helper.getWritableDatabase();
-
         // Удаляем старые данные, чтобы полностью переписать новыми
         db.execSQL("DELETE FROM " + StationSchema.TABLE_NAME);
-
         for (City city : cities) {
             for (Station station : city.getStations()) {
                 ContentValues values = new ContentValues();
@@ -101,6 +115,8 @@ public class DBUtils {
             }
         }
         db.close();
+        // Устанавливаем флаг, что обновление базы данных завершенно
+        preferences.edit().putBoolean(PREFERENCES_UPDATE_COMPLETED, true).apply();
     }
 
     /**

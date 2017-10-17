@@ -1,5 +1,7 @@
 package ru.sergeykamyshov.schedule;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,9 @@ import ru.sergeykamyshov.schedule.models.City;
 import ru.sergeykamyshov.schedule.utils.DBUtils;
 
 import static ru.sergeykamyshov.schedule.ScheduleActivity.EXTRA_PARAM_DIRECTION_TYPE;
+import static ru.sergeykamyshov.schedule.utils.DBUtils.PREFERENCES_FILENAME;
+import static ru.sergeykamyshov.schedule.utils.DBUtils.PREFERENCES_NEED_UPDATE;
+import static ru.sergeykamyshov.schedule.utils.DBUtils.PREFERENCES_UPDATE_COMPLETED;
 
 /**
  * Класс отвечает за обработку на экране "Станции"
@@ -29,6 +33,7 @@ import static ru.sergeykamyshov.schedule.ScheduleActivity.EXTRA_PARAM_DIRECTION_
 public class StationListActivity extends BaseActivity {
 
     private StationRecyclerAdapter mAdapter;
+    private String directionTypeParam;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +52,7 @@ public class StationListActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         // Будем загружать только тот список, который запрашивают ("from" или "to")
-        String directionTypeParam = getIntent().getStringExtra(EXTRA_PARAM_DIRECTION_TYPE);
+        directionTypeParam = getIntent().getStringExtra(EXTRA_PARAM_DIRECTION_TYPE);
         new StationAsyncTask().execute(directionTypeParam);
     }
 
@@ -77,7 +82,14 @@ public class StationListActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_update_db) {
-            Toast.makeText(this, "Updating db...", Toast.LENGTH_SHORT).show();
+            SharedPreferences preferences = getSharedPreferences(PREFERENCES_FILENAME, Context.MODE_PRIVATE);
+            // Проверяем что прошлое обновление базы завершилось. Если нет, то игнорируем
+            if (preferences.getBoolean(PREFERENCES_UPDATE_COMPLETED, false)) {
+                // Меняем флаг "need_update", чтобы обновить данные из json файла
+                preferences.edit().putBoolean(PREFERENCES_NEED_UPDATE, true).apply();
+                // Запускаем обновление данных в адаптере и в базе
+                new StationAsyncTask().execute(directionTypeParam);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
