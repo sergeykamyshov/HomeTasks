@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/countryCityTitleTextView"
-            style="@android:style/TextAppearance.Large"
+            style="@android:style/TextAppearance.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
