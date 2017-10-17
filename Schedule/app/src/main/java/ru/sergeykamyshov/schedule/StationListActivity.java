@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,14 @@ public class StationListActivity extends BaseActivity {
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_update_db) {
+            Toast.makeText(this, "Updating db...", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

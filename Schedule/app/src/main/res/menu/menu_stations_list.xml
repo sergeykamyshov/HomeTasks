@@ -10,4 +10,9 @@
         android:title="@string/menu_item_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_update_db"
+        android:title="@string/menu_update_database"
+        app:showAsAction="never"/>
 </menu>

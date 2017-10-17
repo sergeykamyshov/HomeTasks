@@ -12,6 +12,7 @@
     <string name="menu_item_about">О приложении</string>
     <string name="menu_item_schedule">Расписание</string>
     <string name="menu_item_search">Поиск</string>
+    <string name="menu_update_database">Обновить базу данных</string>
 
     <!--Экран "Расписание" (ScheduleActivity)-->
     <string name="title_arrival_station">Станция прибытия</string>
