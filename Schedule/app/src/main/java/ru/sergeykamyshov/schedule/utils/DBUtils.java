@@ -35,6 +35,10 @@ public class DBUtils {
      * если false, то запрос на обновление будет проигнорирован
      */
     public static final String PREFERENCES_UPDATE_COMPLETED = "update_completed";
+    /**
+     * MD5 хэш файла json, необходим для проверки изменения файла
+     */
+    public static final String PREFERENCES_JSON_MD5 = "json_md5";
 
     /**
      * Возвращает список городов со станциями. При первом запуске приложения данные будут парситься
@@ -46,12 +50,13 @@ public class DBUtils {
      */
     public static List<City> getStations(final Context context, String directionType) {
         List<City> stations;
+        boolean needUpdateByNewFile = FileUtils.isJsonFileChanged(context);
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_FILENAME, Context.MODE_PRIVATE);
-        // При первом запуске необходимо обновить базу из json файла
-        if (preferences.getBoolean(PREFERENCES_NEED_UPDATE, true)) {
+        // Если файл изменился или если пользователь запустил обновление базы
+        if (needUpdateByNewFile || preferences.getBoolean(PREFERENCES_NEED_UPDATE, false)) {
             // Парсим данные из json файла
             final List<City> allStations = JSONUtils.fetchStationDataFromAssetsFile(context);
-            // Отбирает только данные с направлением, которые мы запрашивали
+            // Отбирает только данные с направлением, которое мы запрашивали
             stations = getStationsByDirection(allStations, directionType);
             // Сохраняем полный список данных в базу в отдельном потоке, чтобы не мешать пользователю
             new Thread(new Runnable() {
