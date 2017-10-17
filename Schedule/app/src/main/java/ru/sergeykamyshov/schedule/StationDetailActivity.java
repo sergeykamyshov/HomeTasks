@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * Класс отвечает за обработку на экране "Подробно о станции"
+ */
 public class StationDetailActivity extends BaseActivity {
 
     @Override

@@ -27,6 +27,9 @@ import static ru.sergeykamyshov.schedule.BaseActivity.PARAM_STATION_TITLE;
 import static ru.sergeykamyshov.schedule.ScheduleActivity.REQUEST_PARAM_STATION_NAME;
 import static ru.sergeykamyshov.schedule.ScheduleActivity.REQUEST_PARAM_STATION_REGION;
 
+/**
+ * Адаптер RecyclerView для отображения станций сгрупированные по городам в виде карточек
+ */
 public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecyclerAdapter.ViewHolder> {
 
     private Context mContext;
@@ -56,7 +59,7 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
         // Формирование заголовка категории в формате: "Страна, Город"
         final String countryCityTitle = city.getCountryTitle() + ", " + city.getCityTitle();
         holder.mCountryCityTitle.setText(countryCityTitle);
-        // Удаляем все станции для предыдущей категории, чтобы не накапливались
+        // Удаляем все станции для предыдущей карточки, чтобы не накапливались
         holder.mStationContainerLayout.removeAllViews();
         for (final Station station : city.getStations()) {
             // Т.к. у городов разное кол-вол станций, то создаем и заполняем каждый список станций программно в цикле
@@ -95,6 +98,11 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
         }
     }
 
+    @Override
+    public int getItemCount() {
+        return mDataSet.size();
+    }
+
     /**
      * Производит фильтрацию данных адаптера по переданому запросу
      *
@@ -131,7 +139,7 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
                     filteredCities.add(cityWithFilteredStations);
                 }
             }
-            // Устанавливаем адаптера новый список данных для отображения
+            // Устанавливаем адаптеру новый список данных для отображения
             mDataSet = filteredCities;
         }
         notifyDataSetChanged();
@@ -146,11 +154,6 @@ public class StationRecyclerAdapter extends RecyclerView.Adapter<StationRecycler
     public void setDataSet(List<City> dataSet) {
         mFullDataSet = dataSet;
         mDataSet = dataSet;
-    }
-
-    @Override
-    public int getItemCount() {
-        return mDataSet.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

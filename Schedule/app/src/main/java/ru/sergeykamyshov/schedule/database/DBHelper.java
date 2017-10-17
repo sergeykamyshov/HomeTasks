@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Класс для работы с базой данных
+ */
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "schedule.db";

@@ -18,6 +18,9 @@ import java.util.List;
 import ru.sergeykamyshov.schedule.models.City;
 import ru.sergeykamyshov.schedule.models.Station;
 
+/**
+ * Класс утилита для работы с JSON файлами
+ */
 public class JSONUtils {
 
     public static final String STATIONS_JSON_FILE_LOCATION = "allStations.json";

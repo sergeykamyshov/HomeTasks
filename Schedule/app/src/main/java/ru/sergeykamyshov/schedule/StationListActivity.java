@@ -23,6 +23,9 @@ import ru.sergeykamyshov.schedule.utils.DBUtils;
 
 import static ru.sergeykamyshov.schedule.ScheduleActivity.EXTRA_PARAM_DIRECTION_TYPE;
 
+/**
+ * Класс отвечает за обработку на экране "Станции"
+ */
 public class StationListActivity extends BaseActivity {
 
     private StationRecyclerAdapter mAdapter;
@@ -92,7 +95,7 @@ public class StationListActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(List<City> data) {
-            // Скрываем ProgressBar после выполнения возвращения результата от loader'а
+            // Скрываем ProgressBar после возвращения результата
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.bar_progress);
             progressBar.setVisibility(View.GONE);
             if (data != null && !data.isEmpty()) {

@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import ru.sergeykamyshov.schedule.fragments.DatePickerFragment;
 
+/**
+ * Класс отвечает за обработку на экране "Расписание"
+ */
 public class ScheduleActivity extends BaseActivity {
 
     public static final String LOG_TAG = ScheduleActivity.class.getSimpleName();

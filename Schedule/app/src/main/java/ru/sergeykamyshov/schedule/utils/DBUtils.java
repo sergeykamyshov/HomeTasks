@@ -16,6 +16,9 @@ import ru.sergeykamyshov.schedule.models.Station;
 
 import static ru.sergeykamyshov.schedule.database.StationSchema.Cols.COLUMN_DIRECTION_TYPE;
 
+/**
+ * Класс утилита для работы с базой данных
+ */
 public class DBUtils {
 
     public static final String PREFERENCES_FILENAME = "db_preferences";
