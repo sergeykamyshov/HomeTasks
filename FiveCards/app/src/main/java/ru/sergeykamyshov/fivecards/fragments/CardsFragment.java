@@ -14,6 +14,8 @@ import java.util.List;
 
 import ru.sergeykamyshov.fivecards.R;
 import ru.sergeykamyshov.fivecards.adapters.CardViewAdapter;
+import ru.sergeykamyshov.fivecards.model.CardType;
+import ru.sergeykamyshov.fivecards.model.PostType;
 
 /**
  * Фрагмент отвечает за обработку экрана списка 5 карточек
@@ -32,19 +34,15 @@ public class CardsFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.cards_recycler_veiw);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        List<String> data = generateTestData();
+        List<CardType> data = generateTestTypeData();
         recyclerView.setAdapter(new CardViewAdapter(getContext(), data));
 
         return view;
     }
 
-    private List<String> generateTestData() {
-        List<String> titles = new ArrayList<>();
-        titles.add("Card Title 1");
-        titles.add("Card Title 2");
-        titles.add("Card Title 3");
-        titles.add("Card Title 4");
-        titles.add("Card Title 5");
+    private List<CardType> generateTestTypeData() {
+        List<CardType> titles = new ArrayList<>();
+        titles.add(new PostType(0, "Test Post Title", "Test Post Body"));
         return titles;
     }
 }
