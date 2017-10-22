@@ -67,6 +67,20 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    /**
+     * Обновляет данные адаптера
+     *
+     * @param data - новый список карточек, который необходимо отобразить
+     */
+    public void updateData(List<CardType> data) {
+        mData.clear();
+        mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Holder для постов
+     */
     class PostTypeHolder extends RecyclerView.ViewHolder {
         TextView mPostTitle;
         TextView mPostBody;
