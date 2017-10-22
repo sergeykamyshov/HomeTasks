@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_cards_tab"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="@string/bottom_menu_cards"/>
+    <item
+        android:id="@+id/action_about_tab"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/bottom_menu_about_app"/>
+</menu>

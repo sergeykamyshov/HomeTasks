@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Five Cards</string>
+
+    <!--Нижнее меню-->
+    <string name="bottom_menu_cards">Cards</string>
+    <string name="bottom_menu_about_app">About app</string>
 </resources>
