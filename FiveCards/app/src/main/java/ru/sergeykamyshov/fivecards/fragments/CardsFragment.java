@@ -16,6 +16,7 @@ import java.util.List;
 import ru.sergeykamyshov.fivecards.R;
 import ru.sergeykamyshov.fivecards.adapters.CardViewAdapter;
 import ru.sergeykamyshov.fivecards.model.CardType;
+import ru.sergeykamyshov.fivecards.model.CommentType;
 import ru.sergeykamyshov.fivecards.utils.QueryUtils;
 
 import static ru.sergeykamyshov.fivecards.utils.QueryUtils.POST_TYPE;
@@ -54,6 +55,9 @@ public class CardsFragment extends Fragment {
 
             List<CardType> postTypes = QueryUtils.fetchCardTypeData(POST_TYPE);
             data.add(postTypes.get(0));
+
+            // TODO: удалить заглушку
+            data.add(new CommentType(0, "id labore ex et quam laborum", "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam voluptate ipsam eostempora quo necessitatibus dolor quam autem quasi reiciendis et nam sapiente accusantium"));
 
             return data;
         }
