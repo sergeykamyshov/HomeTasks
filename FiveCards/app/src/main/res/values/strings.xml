@@ -6,7 +6,7 @@
     <string name="bottom_menu_about_app">About app</string>
 
     <!--Экран "О приложении"-->
-    <string name="about_app_description">App is a home task from company. The App helps to estimate the level and skills of developer.</string>
+    <string name="about_app_description">Five Cards is a home task from company. The App helps to estimate the level and skills of developer.</string>
     <string name="about_version">version: </string>
     <string name="about_copyright">2017, Sergey Kamyshov. All right reserved</string>
 </resources>
