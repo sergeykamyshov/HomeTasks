@@ -11,15 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ru.sergeykamyshov.fivecards.R;
 import ru.sergeykamyshov.fivecards.adapters.CardViewAdapter;
 import ru.sergeykamyshov.fivecards.model.CardType;
+import ru.sergeykamyshov.fivecards.model.UsersType;
 import ru.sergeykamyshov.fivecards.utils.QueryUtils;
 
 import static ru.sergeykamyshov.fivecards.utils.QueryUtils.COMMENT_TYPE;
 import static ru.sergeykamyshov.fivecards.utils.QueryUtils.POST_TYPE;
+import static ru.sergeykamyshov.fivecards.utils.QueryUtils.USERS_TYPE;
 
 /**
  * Фрагмент отвечает за обработку экрана списка 5 карточек
@@ -58,6 +61,9 @@ public class CardsFragment extends Fragment {
 
             List<CardType> commentTypes = QueryUtils.fetchCardTypeData(COMMENT_TYPE);
             data.add(commentTypes.get(0));
+
+            List<CardType> usersTypes = QueryUtils.fetchCardTypeData(USERS_TYPE);
+            data.add(usersTypes.get(0));
 
             return data;
         }

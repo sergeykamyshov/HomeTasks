@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -13,12 +15,14 @@ import ru.sergeykamyshov.fivecards.R;
 import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
 import ru.sergeykamyshov.fivecards.model.PostType;
+import ru.sergeykamyshov.fivecards.model.UsersType;
 
 public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_DEFAULT = 0;
     private static final int VIEW_TYPE_POST = 1;
     private static final int VIEW_TYPE_COMMENT = 2;
+    private static final int VIEW_TYPE_USERS = 3;
 
     private Context mContext;
     private List<CardType> mData;
@@ -37,6 +41,9 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case VIEW_TYPE_COMMENT:
                 View commentView = LayoutInflater.from(mContext).inflate(R.layout.comment_item_layout, parent, false);
                 return new CommentTypeHolder(commentView);
+            case VIEW_TYPE_USERS:
+                View usersView = LayoutInflater.from(mContext).inflate(R.layout.users_item_layout, parent, false);
+                return new UsersTypeHolder(usersView);
             default:
                 View defaultView = LayoutInflater.from(mContext).inflate(R.layout.card_item, parent, false);
                 return new CardHolder(defaultView);
@@ -59,6 +66,12 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 commentTypeHolder.mEmail.setText(commentType.getEmail());
                 commentTypeHolder.mBody.setText(commentType.getBody());
                 break;
+            case VIEW_TYPE_USERS:
+                UsersTypeHolder usersTypeHolder = (UsersTypeHolder) holder;
+                UsersType usersType = (UsersType) mData.get(position);
+                List<String> users = usersType.getUsers();
+                usersTypeHolder.mUsers.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, users));
+                break;
             default:
                 break;
         }
@@ -76,6 +89,8 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return VIEW_TYPE_POST;
             case 1:
                 return VIEW_TYPE_COMMENT;
+            case 2:
+                return VIEW_TYPE_USERS;
             default:
                 return VIEW_TYPE_DEFAULT;
         }
@@ -95,7 +110,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     /**
      * Holder для постов
      */
-    class PostTypeHolder extends RecyclerView.ViewHolder {
+    private static class PostTypeHolder extends RecyclerView.ViewHolder {
         TextView mPostTitle;
         TextView mPostBody;
 
@@ -109,7 +124,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     /**
      * Holder для комментариев
      */
-    class CommentTypeHolder extends RecyclerView.ViewHolder {
+    private static class CommentTypeHolder extends RecyclerView.ViewHolder {
         TextView mName;
         TextView mEmail;
         TextView mBody;
@@ -122,7 +137,19 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    class CardHolder extends RecyclerView.ViewHolder {
+    /**
+     * Holder для списка пользователей
+     */
+    private static class UsersTypeHolder extends RecyclerView.ViewHolder {
+        ListView mUsers;
+
+        public UsersTypeHolder(View usersView) {
+            super(usersView);
+            mUsers = usersView.findViewById(R.id.list_users);
+        }
+    }
+
+    private static class CardHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
 
         public CardHolder(View itemView) {

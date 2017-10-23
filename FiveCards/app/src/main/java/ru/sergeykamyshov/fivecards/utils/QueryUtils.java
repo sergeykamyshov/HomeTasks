@@ -20,11 +20,13 @@ import java.util.List;
 import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
 import ru.sergeykamyshov.fivecards.model.PostType;
+import ru.sergeykamyshov.fivecards.model.UsersType;
 
 public class QueryUtils {
 
     public static final String POST_TYPE = "postType";
     public static final String COMMENT_TYPE = "commentType";
+    public static final String USERS_TYPE = "usersType";
 
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
     private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com";
@@ -37,6 +39,8 @@ public class QueryUtils {
                 return extractPosts(jsonResult, type);
             case COMMENT_TYPE:
                 return extractComments(jsonResult, type);
+            case USERS_TYPE:
+                return extractUsers(jsonResult, type);
             default:
                 Log.i(LOG_TAG, "Cannot extract data. Unknown type " + type);
                 return new ArrayList<>();
@@ -58,6 +62,9 @@ public class QueryUtils {
                     break;
                 case COMMENT_TYPE:
                     url = new URL(HTTPS_REQUEST_URL + "/comments");
+                    break;
+                case USERS_TYPE:
+                    url = new URL(HTTPS_REQUEST_URL + "/users");
                     break;
             }
         } catch (MalformedURLException e) {
@@ -182,5 +189,32 @@ public class QueryUtils {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type);
         }
         return commentTypes;
+    }
+
+    /**
+     * Парсит JSON строку для получения списка пользователей
+     *
+     * @param jsonResult - строка в формате JSON
+     * @param type       - тип карточки, для которой выполнялся запрос
+     * @return список пользователей
+     */
+    private static List<CardType> extractUsers(String jsonResult, String type) {
+        List<CardType> usersTypes = new ArrayList<>();
+        if (jsonResult == null || jsonResult.length() == 0) {
+            return usersTypes;
+        }
+        try {
+            JSONArray usersArray = new JSONArray(jsonResult);
+            List<String> usersNames = new ArrayList<>();
+            for (int i = 0; i < usersArray.length(); i++) {
+                JSONObject userObject = (JSONObject) usersArray.get(i);
+                String name = userObject.getString("name");
+                usersNames.add(name);
+            }
+            usersTypes.add(new UsersType(usersNames));
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type);
+        }
+        return usersTypes;
     }
 }
