@@ -18,14 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.sergeykamyshov.fivecards.model.CardType;
+import ru.sergeykamyshov.fivecards.model.CommentType;
 import ru.sergeykamyshov.fivecards.model.PostType;
 
 public class QueryUtils {
 
     public static final String POST_TYPE = "postType";
+    public static final String COMMENT_TYPE = "commentType";
 
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
-    private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com/";
+    private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com";
 
     public static List<CardType> fetchCardTypeData(String type) {
         URL url = createUrl(type);
@@ -33,6 +35,8 @@ public class QueryUtils {
         switch (type) {
             case POST_TYPE:
                 return extractPosts(jsonResult, type);
+            case COMMENT_TYPE:
+                return extractComments(jsonResult, type);
             default:
                 Log.i(LOG_TAG, "Cannot extract data. Unknown type " + type);
                 return new ArrayList<>();
@@ -50,7 +54,10 @@ public class QueryUtils {
         try {
             switch (type) {
                 case POST_TYPE:
-                    url = new URL(HTTPS_REQUEST_URL + "posts");
+                    url = new URL(HTTPS_REQUEST_URL + "/posts");
+                    break;
+                case COMMENT_TYPE:
+                    url = new URL(HTTPS_REQUEST_URL + "/comments");
                     break;
             }
         } catch (MalformedURLException e) {
@@ -147,5 +154,33 @@ public class QueryUtils {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type);
         }
         return postTypes;
+    }
+
+    /**
+     * Парсит JSON строку для получения списка комментариев
+     *
+     * @param jsonResult - строка в формате JSON
+     * @param type       - тип карточки, для которой выполнялся запрос
+     * @return список комментариев
+     */
+    private static List<CardType> extractComments(String jsonResult, String type) {
+        List<CardType> commentTypes = new ArrayList<>();
+        if (jsonResult == null || jsonResult.length() == 0) {
+            return commentTypes;
+        }
+        try {
+            JSONArray commentsArray = new JSONArray(jsonResult);
+            for (int i = 0; i < commentsArray.length(); i++) {
+                JSONObject commentObject = (JSONObject) commentsArray.get(i);
+                int id = commentObject.getInt("id");
+                String name = commentObject.getString("name");
+                String email = commentObject.getString("email");
+                String body = commentObject.getString("body");
+                commentTypes.add(new CommentType(id, name, email, body));
+            }
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type);
+        }
+        return commentTypes;
     }
 }
