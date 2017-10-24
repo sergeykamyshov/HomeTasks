@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,9 @@ public class CardsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<CardType> cardTypes) {
+            ProgressBar progressBar = getActivity().findViewById(R.id.load_progress);
+            progressBar.setVisibility(View.GONE);
+
             mCardViewAdapter.updateData(cardTypes);
         }
     }
