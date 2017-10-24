@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
 import ru.sergeykamyshov.fivecards.model.ImageType;
 import ru.sergeykamyshov.fivecards.model.PostType;
+import ru.sergeykamyshov.fivecards.model.TodoType;
 import ru.sergeykamyshov.fivecards.model.UsersType;
 
 public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -26,6 +28,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int VIEW_TYPE_COMMENT = 2;
     private static final int VIEW_TYPE_USERS = 3;
     private static final int VIEW_TYPE_IMAGE = 4;
+    private static final int VIEW_TYPE_TODO = 5;
 
     private Context mContext;
     private List<CardType> mData;
@@ -50,6 +53,9 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case VIEW_TYPE_IMAGE:
                 View imageView = LayoutInflater.from(mContext).inflate(R.layout.image_item_layout, parent, false);
                 return new ImageTypeHolder(imageView);
+            case VIEW_TYPE_TODO:
+                View todoView = LayoutInflater.from(mContext).inflate(R.layout.todo_item_layout, parent, false);
+                return new TodoTypeHolder(todoView);
             default:
                 View defaultView = LayoutInflater.from(mContext).inflate(R.layout.card_item, parent, false);
                 return new CardHolder(defaultView);
@@ -83,6 +89,12 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ImageType imageType = (ImageType) mData.get(position);
                 imageTypeHolder.mImageView.setImageBitmap(imageType.getImage());
                 break;
+            case VIEW_TYPE_TODO:
+                TodoTypeHolder todoTypeHolder = (TodoTypeHolder) holder;
+                TodoType todoType = (TodoType) mData.get(position);
+                todoTypeHolder.mTitle.setText(todoType.getTitle());
+                todoTypeHolder.mCompleted.setChecked(todoType.isCompleted());
+                break;
             default:
                 break;
         }
@@ -104,6 +116,8 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return VIEW_TYPE_USERS;
             case 3:
                 return VIEW_TYPE_IMAGE;
+            case 4:
+                return VIEW_TYPE_TODO;
             default:
                 return VIEW_TYPE_DEFAULT;
         }
@@ -171,6 +185,20 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public ImageTypeHolder(View imageView) {
             super(imageView);
             mImageView = imageView.findViewById(R.id.image_view);
+        }
+    }
+
+    /**
+     * Holder для списка дел
+     */
+    private static class TodoTypeHolder extends RecyclerView.ViewHolder {
+        TextView mTitle;
+        CheckBox mCompleted;
+
+        public TodoTypeHolder(View todoView) {
+            super(todoView);
+            mTitle = todoView.findViewById(R.id.text_todo_title);
+            mCompleted = todoView.findViewById(R.id.checkbox_todo_completed);
         }
     }
 

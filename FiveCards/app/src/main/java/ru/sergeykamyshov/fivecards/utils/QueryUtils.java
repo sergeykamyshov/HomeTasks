@@ -23,6 +23,7 @@ import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
 import ru.sergeykamyshov.fivecards.model.ImageType;
 import ru.sergeykamyshov.fivecards.model.PostType;
+import ru.sergeykamyshov.fivecards.model.TodoType;
 import ru.sergeykamyshov.fivecards.model.UsersType;
 
 public class QueryUtils {
@@ -31,6 +32,7 @@ public class QueryUtils {
     public static final String COMMENT_TYPE = "commentType";
     public static final String USERS_TYPE = "usersType";
     public static final String IMAGE_TYPE = "imageType";
+    public static final String TODO_TYPE = "todoType";
 
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
     private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com";
@@ -47,6 +49,8 @@ public class QueryUtils {
                 return extractUsers(jsonResult, type);
             case IMAGE_TYPE:
                 return extractImage(jsonResult, type);
+            case TODO_TYPE:
+                return extractTodo(jsonResult, type);
             default:
                 Log.i(LOG_TAG, "Cannot extract data. Unknown type " + type);
                 return new ArrayList<>();
@@ -74,6 +78,10 @@ public class QueryUtils {
                     break;
                 case IMAGE_TYPE:
                     url = new URL(HTTPS_REQUEST_URL + "/photos/3");
+                    break;
+                case TODO_TYPE:
+                    int randomTodoId = 1 + (int) (Math.random() * 200);
+                    url = new URL(HTTPS_REQUEST_URL + "/todos/" + randomTodoId);
                     break;
             }
         } catch (MalformedURLException e) {
@@ -253,4 +261,28 @@ public class QueryUtils {
         }
         return imageTypes;
     }
+
+    /**
+     * Парсит JSON строку для получения списка дел
+     *
+     * @param jsonResult - строка в формате JSON
+     * @param type       - тип карточки, для которой выполнялся запрос
+     * @return список дел
+     */
+    private static List<CardType> extractTodo(String jsonResult, String type) {
+        List<CardType> todoTypes = new ArrayList<>();
+        if (jsonResult == null || jsonResult.length() == 0) {
+            return todoTypes;
+        }
+        try {
+            JSONObject todoObject = new JSONObject(jsonResult);
+            String title = todoObject.getString("title");
+            boolean isCompleted = todoObject.getBoolean("completed");
+            todoTypes.add(new TodoType(title, isCompleted));
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
+        }
+        return todoTypes;
+    }
+
 }
