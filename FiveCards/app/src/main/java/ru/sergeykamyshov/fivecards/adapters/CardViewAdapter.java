@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import ru.sergeykamyshov.fivecards.R;
 import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
+import ru.sergeykamyshov.fivecards.model.ImageType;
 import ru.sergeykamyshov.fivecards.model.PostType;
 import ru.sergeykamyshov.fivecards.model.UsersType;
 
@@ -23,6 +25,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int VIEW_TYPE_POST = 1;
     private static final int VIEW_TYPE_COMMENT = 2;
     private static final int VIEW_TYPE_USERS = 3;
+    private static final int VIEW_TYPE_IMAGE = 4;
 
     private Context mContext;
     private List<CardType> mData;
@@ -44,6 +47,9 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case VIEW_TYPE_USERS:
                 View usersView = LayoutInflater.from(mContext).inflate(R.layout.users_item_layout, parent, false);
                 return new UsersTypeHolder(usersView);
+            case VIEW_TYPE_IMAGE:
+                View imageView = LayoutInflater.from(mContext).inflate(R.layout.image_item_layout, parent, false);
+                return new ImageTypeHolder(imageView);
             default:
                 View defaultView = LayoutInflater.from(mContext).inflate(R.layout.card_item, parent, false);
                 return new CardHolder(defaultView);
@@ -72,6 +78,11 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 List<String> users = usersType.getUsers();
                 usersTypeHolder.mUsers.setAdapter(new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, users));
                 break;
+            case VIEW_TYPE_IMAGE:
+                ImageTypeHolder imageTypeHolder = (ImageTypeHolder) holder;
+                ImageType imageType = (ImageType) mData.get(position);
+                imageTypeHolder.mImageView.setImageBitmap(imageType.getImage());
+                break;
             default:
                 break;
         }
@@ -91,6 +102,8 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return VIEW_TYPE_COMMENT;
             case 2:
                 return VIEW_TYPE_USERS;
+            case 3:
+                return VIEW_TYPE_IMAGE;
             default:
                 return VIEW_TYPE_DEFAULT;
         }
@@ -146,6 +159,18 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public UsersTypeHolder(View usersView) {
             super(usersView);
             mUsers = usersView.findViewById(R.id.list_users);
+        }
+    }
+
+    /**
+     * Holder для изображения
+     */
+    private static class ImageTypeHolder extends RecyclerView.ViewHolder {
+        ImageView mImageView;
+
+        public ImageTypeHolder(View imageView) {
+            super(imageView);
+            mImageView = imageView.findViewById(R.id.image_view);
         }
     }
 

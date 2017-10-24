@@ -11,16 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ru.sergeykamyshov.fivecards.R;
 import ru.sergeykamyshov.fivecards.adapters.CardViewAdapter;
 import ru.sergeykamyshov.fivecards.model.CardType;
-import ru.sergeykamyshov.fivecards.model.UsersType;
 import ru.sergeykamyshov.fivecards.utils.QueryUtils;
 
 import static ru.sergeykamyshov.fivecards.utils.QueryUtils.COMMENT_TYPE;
+import static ru.sergeykamyshov.fivecards.utils.QueryUtils.IMAGE_TYPE;
 import static ru.sergeykamyshov.fivecards.utils.QueryUtils.POST_TYPE;
 import static ru.sergeykamyshov.fivecards.utils.QueryUtils.USERS_TYPE;
 
@@ -64,6 +63,9 @@ public class CardsFragment extends Fragment {
 
             List<CardType> usersTypes = QueryUtils.fetchCardTypeData(USERS_TYPE);
             data.add(usersTypes.get(0));
+
+            List<CardType> imageTypes = QueryUtils.fetchCardTypeData(IMAGE_TYPE);
+            data.add(imageTypes.get(0));
 
             return data;
         }

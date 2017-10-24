@@ -1,5 +1,7 @@
 package ru.sergeykamyshov.fivecards.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
+import ru.sergeykamyshov.fivecards.model.ImageType;
 import ru.sergeykamyshov.fivecards.model.PostType;
 import ru.sergeykamyshov.fivecards.model.UsersType;
 
@@ -27,6 +30,7 @@ public class QueryUtils {
     public static final String POST_TYPE = "postType";
     public static final String COMMENT_TYPE = "commentType";
     public static final String USERS_TYPE = "usersType";
+    public static final String IMAGE_TYPE = "imageType";
 
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
     private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com";
@@ -41,6 +45,8 @@ public class QueryUtils {
                 return extractComments(jsonResult, type);
             case USERS_TYPE:
                 return extractUsers(jsonResult, type);
+            case IMAGE_TYPE:
+                return extractImage(jsonResult, type);
             default:
                 Log.i(LOG_TAG, "Cannot extract data. Unknown type " + type);
                 return new ArrayList<>();
@@ -65,6 +71,9 @@ public class QueryUtils {
                     break;
                 case USERS_TYPE:
                     url = new URL(HTTPS_REQUEST_URL + "/users");
+                    break;
+                case IMAGE_TYPE:
+                    url = new URL(HTTPS_REQUEST_URL + "/photos/3");
                     break;
             }
         } catch (MalformedURLException e) {
@@ -158,7 +167,7 @@ public class QueryUtils {
                 postTypes.add(new PostType(id, title, body));
             }
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type);
+            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
         return postTypes;
     }
@@ -186,7 +195,7 @@ public class QueryUtils {
                 commentTypes.add(new CommentType(id, name, email, body));
             }
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type);
+            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
         return commentTypes;
     }
@@ -213,8 +222,35 @@ public class QueryUtils {
             }
             usersTypes.add(new UsersType(usersNames));
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type);
+            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
         return usersTypes;
+    }
+
+    /**
+     * Парсит JSON строку для получения изображения
+     *
+     * @param jsonResult - строка в формате JSON
+     * @param type       - тип карточки, для которой выполнялся запрос
+     * @return список изображений
+     */
+    private static List<CardType> extractImage(String jsonResult, String type) {
+        List<CardType> imageTypes = new ArrayList<>();
+        if (jsonResult == null || jsonResult.length() == 0) {
+            return imageTypes;
+        }
+        try {
+            JSONObject imageObject = new JSONObject(jsonResult);
+            String urlString = imageObject.getString("url");
+
+            InputStream stream = new URL(urlString).openConnection().getInputStream();
+            Bitmap bitmap = BitmapFactory.decodeStream(stream);
+            imageTypes.add(new ImageType(bitmap));
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem getting image from connection for type " + type, e);
+        }
+        return imageTypes;
     }
 }
