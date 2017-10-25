@@ -39,6 +39,29 @@
             android:layout_margin="16dp"
             android:textSize="14sp"
             tools:text="Material Design is a unified system that combines theory, resources, and tools for crafting digital experiences."/>
-    </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_comment_submit_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/card_action_submit"
+                android:textAllCaps="true"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_text_comment_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:inputType="number"/>
+        </LinearLayout>
+    </LinearLayout>
 </android.support.v7.widget.CardView>

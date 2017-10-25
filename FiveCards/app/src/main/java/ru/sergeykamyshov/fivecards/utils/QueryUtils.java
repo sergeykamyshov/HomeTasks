@@ -75,7 +75,7 @@ public class QueryUtils {
                     url = new URL(HTTPS_REQUEST_URL + "/posts/" + id);
                     break;
                 case COMMENT_TYPE:
-                    url = new URL(HTTPS_REQUEST_URL + "/comments");
+                    url = new URL(HTTPS_REQUEST_URL + "/comments/" + id);
                     break;
                 case USERS_TYPE:
                     url = new URL(HTTPS_REQUEST_URL + "/users");
@@ -84,6 +84,7 @@ public class QueryUtils {
                     url = new URL(HTTPS_REQUEST_URL + "/photos/3");
                     break;
                 case TODO_TYPE:
+                    // Генерируем случайный id задачи
                     int randomTodoId = 1 + (int) (Math.random() * 200);
                     url = new URL(HTTPS_REQUEST_URL + "/todos/" + randomTodoId);
                     break;
@@ -194,15 +195,12 @@ public class QueryUtils {
             return commentTypes;
         }
         try {
-            JSONArray commentsArray = new JSONArray(jsonResult);
-            for (int i = 0; i < commentsArray.length(); i++) {
-                JSONObject commentObject = (JSONObject) commentsArray.get(i);
-                int id = commentObject.getInt("id");
-                String name = commentObject.getString("name");
-                String email = commentObject.getString("email");
-                String body = commentObject.getString("body");
-                commentTypes.add(new CommentType(id, name, email, body));
-            }
+            JSONObject commentObject = new JSONObject(jsonResult);
+            int id = commentObject.getInt("id");
+            String name = commentObject.getString("name");
+            String email = commentObject.getString("email");
+            String body = commentObject.getString("body");
+            commentTypes.add(new CommentType(id, name, email, body));
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }

@@ -26,7 +26,7 @@ import static ru.sergeykamyshov.fivecards.utils.QueryUtils.TODO_TYPE;
 import static ru.sergeykamyshov.fivecards.utils.QueryUtils.USERS_TYPE;
 
 /**
- * Фрагмент отвечает за обработку экрана списка 5 карточек
+ * Фрагмент отвечает за обработку экрана списка из 5 карточек
  */
 public class CardsFragment extends Fragment {
 

@@ -13,4 +13,5 @@
     <!--Карточки-->
     <string name="card_action_submit">Submit</string>
     <string name="toast_msg_post_number">Post number must be less or equal 100</string>
+    <string name="toast_msg_comment_number">Comment number must be less or equal 500</string>
 </resources>

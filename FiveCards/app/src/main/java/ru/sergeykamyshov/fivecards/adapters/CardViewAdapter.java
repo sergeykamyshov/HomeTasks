@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import ru.sergeykamyshov.fivecards.R;
+import ru.sergeykamyshov.fivecards.asynctasks.CommentAsyncTask;
 import ru.sergeykamyshov.fivecards.asynctasks.PostAsyncTask;
 import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
@@ -88,11 +89,24 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
                 break;
             case VIEW_TYPE_COMMENT:
-                CommentTypeHolder commentTypeHolder = (CommentTypeHolder) holder;
+                final CommentTypeHolder commentTypeHolder = (CommentTypeHolder) holder;
                 CommentType commentType = (CommentType) mData.get(position);
                 commentTypeHolder.mName.setText(commentType.getName());
                 commentTypeHolder.mEmail.setText(commentType.getEmail());
                 commentTypeHolder.mBody.setText(commentType.getBody());
+                commentTypeHolder.mSubmitAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String commentNumber = commentTypeHolder.mCommentNumber.getText().toString();
+                        if (commentNumber.isEmpty()) {
+                            return;
+                        } else if (Integer.valueOf(commentNumber) > 500) {
+                            Toast.makeText(mContext, mContext.getString(R.string.toast_msg_comment_number), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        new CommentAsyncTask(CardViewAdapter.this).execute(commentNumber);
+                    }
+                });
                 break;
             case VIEW_TYPE_USERS:
                 UsersTypeHolder usersTypeHolder = (UsersTypeHolder) holder;
@@ -179,12 +193,16 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView mName;
         TextView mEmail;
         TextView mBody;
+        TextView mSubmitAction;
+        EditText mCommentNumber;
 
         public CommentTypeHolder(View commentView) {
             super(commentView);
             mName = commentView.findViewById(R.id.text_comment_name);
             mEmail = commentView.findViewById(R.id.text_comment_email);
             mBody = commentView.findViewById(R.id.text_comment_body);
+            mSubmitAction = commentView.findViewById(R.id.text_comment_submit_action);
+            mCommentNumber = commentView.findViewById(R.id.edit_text_comment_number);
         }
     }
 

@@ -10,20 +10,20 @@ import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.utils.QueryUtils;
 
 /**
- * AsyncTask для загрузки конкретного id поста
+ * AsyncTask для загрузки конкретного id комментария
  */
-public class PostAsyncTask extends AsyncTask<String, Void, List<CardType>> {
+public class CommentAsyncTask extends AsyncTask<String, Void, List<CardType>> {
 
     private CardViewAdapter mAdapter;
 
-    public PostAsyncTask(CardViewAdapter adapter) {
+    public CommentAsyncTask(CardViewAdapter adapter) {
         mAdapter = adapter;
     }
 
     @Override
     protected List<CardType> doInBackground(String... params) {
-        String postNumber = params[0];
-        return QueryUtils.fetchCardTypeData(QueryUtils.POST_TYPE, postNumber);
+        String commentNumber = params[0];
+        return QueryUtils.fetchCardTypeData(QueryUtils.COMMENT_TYPE, commentNumber);
     }
 
     @Override
@@ -31,8 +31,8 @@ public class PostAsyncTask extends AsyncTask<String, Void, List<CardType>> {
         // Удаляем старый тип карточки и добавляем новый
         List<CardType> newData = new ArrayList<>();
         newData.addAll(mAdapter.getData());
-        newData.remove(0);
-        newData.add(0, cardTypes.get(0));
+        newData.remove(1);
+        newData.add(1, cardTypes.get(0));
 
         mAdapter.updateData(newData);
     }
