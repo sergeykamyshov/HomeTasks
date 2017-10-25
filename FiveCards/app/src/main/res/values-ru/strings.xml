@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Пять Карточек</string>
+
+    <!--Нижнее меню-->
+    <string name="bottom_menu_cards">Карточки</string>
+    <string name="bottom_menu_about_app">О приложении</string>
+
+    <!--Экран "О приложении"-->
+    <string name="about_app_description">Пять Карточек это тестовое задание от компании. Приложение помогает оценить уровень и способности разработчика.</string>
+    <string name="about_version">"версия: "</string>
+    <string name="about_copyright">2017, Сергей Камышов. Все права защищены</string>
+
+    <!--Экран "Пять карточек-->
+    <string name="card_action_submit">Подтвердить</string>
+    <string name="toast_msg_post_number">Номер поста должен быть меньше или равен 100</string>
+    <string name="toast_msg_comment_number">Номер комментария должен быть меньше или равен 500</string>
+</resources>
