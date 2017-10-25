@@ -9,4 +9,8 @@
     <string name="about_app_description">Five Cards is a home task from company. The App helps to estimate the level and skills of developer.</string>
     <string name="about_version">version: </string>
     <string name="about_copyright">2017, Sergey Kamyshov. All right reserved</string>
+
+    <!--Карточки-->
+    <string name="card_action_submit">Submit</string>
+    <string name="toast_msg_post_number">Post number must be less or equal 100</string>
 </resources>

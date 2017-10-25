@@ -53,14 +53,18 @@ public class CardsFragment extends Fragment {
     }
 
     class CardsAsyncTask extends AsyncTask<Void, Void, List<CardType>> {
+
+        public static final String DEFAULT_POST_ID = "1";
+        public static final String DEFAULT_COMMENT_ID = "1";
+
         @Override
         protected List<CardType> doInBackground(Void... params) {
             List<CardType> data = new ArrayList<>();
 
-            List<CardType> postTypes = QueryUtils.fetchCardTypeData(POST_TYPE);
+            List<CardType> postTypes = QueryUtils.fetchCardTypeData(POST_TYPE, DEFAULT_POST_ID);
             data.add(postTypes.get(0));
 
-            List<CardType> commentTypes = QueryUtils.fetchCardTypeData(COMMENT_TYPE);
+            List<CardType> commentTypes = QueryUtils.fetchCardTypeData(COMMENT_TYPE, DEFAULT_COMMENT_ID);
             data.add(commentTypes.get(0));
 
             List<CardType> usersTypes = QueryUtils.fetchCardTypeData(USERS_TYPE);

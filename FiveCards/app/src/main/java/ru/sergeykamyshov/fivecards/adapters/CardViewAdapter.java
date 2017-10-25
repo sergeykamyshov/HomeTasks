@@ -7,13 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import ru.sergeykamyshov.fivecards.R;
+import ru.sergeykamyshov.fivecards.asynctasks.PostAsyncTask;
 import ru.sergeykamyshov.fivecards.model.CardType;
 import ru.sergeykamyshov.fivecards.model.CommentType;
 import ru.sergeykamyshov.fivecards.model.ImageType;
@@ -66,10 +69,23 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_POST:
-                PostTypeHolder postHolder = (PostTypeHolder) holder;
+                final PostTypeHolder postHolder = (PostTypeHolder) holder;
                 PostType postType = (PostType) mData.get(position);
                 postHolder.mPostTitle.setText(postType.getTitle());
                 postHolder.mPostBody.setText(postType.getBody());
+                postHolder.mSubmitAction.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String postNumber = postHolder.mPostNumber.getText().toString();
+                        if (postNumber.isEmpty()) {
+                            return;
+                        } else if (Integer.valueOf(postNumber) > 100) {
+                            Toast.makeText(mContext, mContext.getString(R.string.toast_msg_post_number), Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        new PostAsyncTask(CardViewAdapter.this).execute(postNumber);
+                    }
+                });
                 break;
             case VIEW_TYPE_COMMENT:
                 CommentTypeHolder commentTypeHolder = (CommentTypeHolder) holder;
@@ -123,6 +139,10 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    public List<CardType> getData() {
+        return mData;
+    }
+
     /**
      * Обновляет данные адаптера
      *
@@ -140,11 +160,15 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static class PostTypeHolder extends RecyclerView.ViewHolder {
         TextView mPostTitle;
         TextView mPostBody;
+        TextView mSubmitAction;
+        EditText mPostNumber;
 
         public PostTypeHolder(View postView) {
             super(postView);
             mPostTitle = postView.findViewById(R.id.text_post_title);
             mPostBody = postView.findViewById(R.id.text_post_body);
+            mSubmitAction = postView.findViewById(R.id.text_post_submit_action);
+            mPostNumber = postView.findViewById(R.id.edit_text_post_number);
         }
     }
 

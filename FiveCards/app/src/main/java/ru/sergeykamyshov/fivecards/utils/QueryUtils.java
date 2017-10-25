@@ -38,7 +38,11 @@ public class QueryUtils {
     private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com";
 
     public static List<CardType> fetchCardTypeData(String type) {
-        URL url = createUrl(type);
+        return fetchCardTypeData(type, null);
+    }
+
+    public static List<CardType> fetchCardTypeData(String type, String id) {
+        URL url = createUrl(type, id);
         String jsonResult = makeHttpRequest(url, type);
         switch (type) {
             case POST_TYPE:
@@ -63,12 +67,12 @@ public class QueryUtils {
      * @param type - тип карточки
      * @return URL
      */
-    private static URL createUrl(String type) {
+    private static URL createUrl(String type, String id) {
         URL url = null;
         try {
             switch (type) {
                 case POST_TYPE:
-                    url = new URL(HTTPS_REQUEST_URL + "/posts");
+                    url = new URL(HTTPS_REQUEST_URL + "/posts/" + id);
                     break;
                 case COMMENT_TYPE:
                     url = new URL(HTTPS_REQUEST_URL + "/comments");
@@ -166,14 +170,11 @@ public class QueryUtils {
             return postTypes;
         }
         try {
-            JSONArray postsArray = new JSONArray(jsonResult);
-            for (int i = 0; i < postsArray.length(); i++) {
-                JSONObject postObject = (JSONObject) postsArray.get(i);
-                int id = postObject.getInt("id");
-                String title = postObject.getString("title");
-                String body = postObject.getString("body");
-                postTypes.add(new PostType(id, title, body));
-            }
+            JSONObject postObject = new JSONObject(jsonResult);
+            int id = postObject.getInt("id");
+            String title = postObject.getString("title");
+            String body = postObject.getString("body");
+            postTypes.add(new PostType(id, title, body));
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
