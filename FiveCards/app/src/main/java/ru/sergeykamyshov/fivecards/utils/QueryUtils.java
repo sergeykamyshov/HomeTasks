@@ -37,11 +37,11 @@ public class QueryUtils {
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
     private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com";
 
-    public static List<CardType> fetchCardTypeData(String type) {
+    public static CardType fetchCardTypeData(String type) {
         return fetchCardTypeData(type, null);
     }
 
-    public static List<CardType> fetchCardTypeData(String type, String id) {
+    public static CardType fetchCardTypeData(String type, String id) {
         URL url = createUrl(type, id);
         String jsonResult = makeHttpRequest(url, type);
         switch (type) {
@@ -57,7 +57,7 @@ public class QueryUtils {
                 return extractTodo(jsonResult, type);
             default:
                 Log.i(LOG_TAG, "Cannot extract data. Unknown type " + type);
-                return new ArrayList<>();
+                return null;
         }
     }
 
@@ -159,40 +159,40 @@ public class QueryUtils {
     }
 
     /**
-     * Парсит JSON строку для получения списка постов
+     * Парсит JSON строку для получения поста
      *
      * @param jsonResult - строка в формате JSON
      * @param type       - тип карточки, для которой выполнялся запрос
-     * @return список постов
+     * @return тип карточки - пост
      */
-    private static List<CardType> extractPosts(String jsonResult, String type) {
-        List<CardType> postTypes = new ArrayList<>();
+    private static CardType extractPosts(String jsonResult, String type) {
+        CardType postType = new PostType(0, "", "");
         if (jsonResult == null || jsonResult.length() == 0) {
-            return postTypes;
+            return postType;
         }
         try {
             JSONObject postObject = new JSONObject(jsonResult);
             int id = postObject.getInt("id");
             String title = postObject.getString("title");
             String body = postObject.getString("body");
-            postTypes.add(new PostType(id, title, body));
+            return new PostType(id, title, body);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
-        return postTypes;
+        return postType;
     }
 
     /**
-     * Парсит JSON строку для получения списка комментариев
+     * Парсит JSON строку для получения комментария
      *
      * @param jsonResult - строка в формате JSON
      * @param type       - тип карточки, для которой выполнялся запрос
-     * @return список комментариев
+     * @return тип карточки - комментарий
      */
-    private static List<CardType> extractComments(String jsonResult, String type) {
-        List<CardType> commentTypes = new ArrayList<>();
+    private static CardType extractComments(String jsonResult, String type) {
+        CardType commentType = new CommentType(0, "", "", "");
         if (jsonResult == null || jsonResult.length() == 0) {
-            return commentTypes;
+            return commentType;
         }
         try {
             JSONObject commentObject = new JSONObject(jsonResult);
@@ -200,24 +200,24 @@ public class QueryUtils {
             String name = commentObject.getString("name");
             String email = commentObject.getString("email");
             String body = commentObject.getString("body");
-            commentTypes.add(new CommentType(id, name, email, body));
+            commentType = new CommentType(id, name, email, body);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
-        return commentTypes;
+        return commentType;
     }
 
     /**
-     * Парсит JSON строку для получения списка пользователей
+     * Парсит JSON строку для получения пользователей
      *
      * @param jsonResult - строка в формате JSON
      * @param type       - тип карточки, для которой выполнялся запрос
-     * @return список пользователей
+     * @return тип карточки - пользователи
      */
-    private static List<CardType> extractUsers(String jsonResult, String type) {
-        List<CardType> usersTypes = new ArrayList<>();
+    private static CardType extractUsers(String jsonResult, String type) {
+        CardType usersType = new UsersType(new ArrayList<String>());
         if (jsonResult == null || jsonResult.length() == 0) {
-            return usersTypes;
+            return usersType;
         }
         try {
             JSONArray usersArray = new JSONArray(jsonResult);
@@ -227,11 +227,11 @@ public class QueryUtils {
                 String name = userObject.getString("name");
                 usersNames.add(name);
             }
-            usersTypes.add(new UsersType(usersNames));
+            usersType = new UsersType(usersNames);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
-        return usersTypes;
+        return usersType;
     }
 
     /**
@@ -239,49 +239,50 @@ public class QueryUtils {
      *
      * @param jsonResult - строка в формате JSON
      * @param type       - тип карточки, для которой выполнялся запрос
-     * @return список изображений
+     * @return тип карточки - изображение
      */
-    private static List<CardType> extractImage(String jsonResult, String type) {
-        List<CardType> imageTypes = new ArrayList<>();
+    private static CardType extractImage(String jsonResult, String type) {
+        CardType imageType = new ImageType(null);
         if (jsonResult == null || jsonResult.length() == 0) {
-            return imageTypes;
+            return imageType;
         }
         try {
             JSONObject imageObject = new JSONObject(jsonResult);
             String urlString = imageObject.getString("url");
 
+            // Загружаем изображение по полученной ссылке
             InputStream stream = new URL(urlString).openConnection().getInputStream();
             Bitmap bitmap = BitmapFactory.decodeStream(stream);
-            imageTypes.add(new ImageType(bitmap));
+            imageType = new ImageType(bitmap);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Problem getting image from connection for type " + type, e);
         }
-        return imageTypes;
+        return imageType;
     }
 
     /**
-     * Парсит JSON строку для получения списка дел
+     * Парсит JSON строку для получения задачи из списка дел
      *
      * @param jsonResult - строка в формате JSON
      * @param type       - тип карточки, для которой выполнялся запрос
-     * @return список дел
+     * @return тип карточки - задача из список дел
      */
-    private static List<CardType> extractTodo(String jsonResult, String type) {
-        List<CardType> todoTypes = new ArrayList<>();
+    private static CardType extractTodo(String jsonResult, String type) {
+        CardType todoType = new TodoType("", false);
         if (jsonResult == null || jsonResult.length() == 0) {
-            return todoTypes;
+            return todoType;
         }
         try {
             JSONObject todoObject = new JSONObject(jsonResult);
             String title = todoObject.getString("title");
             boolean isCompleted = todoObject.getBoolean("completed");
-            todoTypes.add(new TodoType(title, isCompleted));
+            todoType = new TodoType(title, isCompleted);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Problem parsing JSON result for type " + type, e);
         }
-        return todoTypes;
+        return todoType;
     }
 
 }

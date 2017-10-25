@@ -60,22 +60,11 @@ public class CardsFragment extends Fragment {
         @Override
         protected List<CardType> doInBackground(Void... params) {
             List<CardType> data = new ArrayList<>();
-
-            List<CardType> postTypes = QueryUtils.fetchCardTypeData(POST_TYPE, DEFAULT_POST_ID);
-            data.add(postTypes.get(0));
-
-            List<CardType> commentTypes = QueryUtils.fetchCardTypeData(COMMENT_TYPE, DEFAULT_COMMENT_ID);
-            data.add(commentTypes.get(0));
-
-            List<CardType> usersTypes = QueryUtils.fetchCardTypeData(USERS_TYPE);
-            data.add(usersTypes.get(0));
-
-            List<CardType> imageTypes = QueryUtils.fetchCardTypeData(IMAGE_TYPE);
-            data.add(imageTypes.get(0));
-
-            List<CardType> todoTypes = QueryUtils.fetchCardTypeData(TODO_TYPE);
-            data.add(todoTypes.get(0));
-
+            data.add(QueryUtils.fetchCardTypeData(POST_TYPE, DEFAULT_POST_ID));
+            data.add(QueryUtils.fetchCardTypeData(COMMENT_TYPE, DEFAULT_COMMENT_ID));
+            data.add(QueryUtils.fetchCardTypeData(USERS_TYPE));
+            data.add(QueryUtils.fetchCardTypeData(IMAGE_TYPE));
+            data.add(QueryUtils.fetchCardTypeData(TODO_TYPE));
             return data;
         }
 

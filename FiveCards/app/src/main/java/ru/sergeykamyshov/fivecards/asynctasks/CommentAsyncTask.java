@@ -12,7 +12,7 @@ import ru.sergeykamyshov.fivecards.utils.QueryUtils;
 /**
  * AsyncTask для загрузки конкретного id комментария
  */
-public class CommentAsyncTask extends AsyncTask<String, Void, List<CardType>> {
+public class CommentAsyncTask extends AsyncTask<String, Void, CardType> {
 
     private CardViewAdapter mAdapter;
 
@@ -21,18 +21,18 @@ public class CommentAsyncTask extends AsyncTask<String, Void, List<CardType>> {
     }
 
     @Override
-    protected List<CardType> doInBackground(String... params) {
+    protected CardType doInBackground(String... params) {
         String commentNumber = params[0];
         return QueryUtils.fetchCardTypeData(QueryUtils.COMMENT_TYPE, commentNumber);
     }
 
     @Override
-    protected void onPostExecute(List<CardType> cardTypes) {
+    protected void onPostExecute(CardType cardType) {
         // Удаляем старый тип карточки и добавляем новый
         List<CardType> newData = new ArrayList<>();
         newData.addAll(mAdapter.getData());
         newData.remove(1);
-        newData.add(1, cardTypes.get(0));
+        newData.add(1, cardType);
 
         mAdapter.updateData(newData);
     }

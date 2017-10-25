@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!--TODO: Реализовать динамическое вычисление высоты списка пользователей-->
         <ListView
             android:id="@+id/list_users"
             android:layout_width="match_parent"

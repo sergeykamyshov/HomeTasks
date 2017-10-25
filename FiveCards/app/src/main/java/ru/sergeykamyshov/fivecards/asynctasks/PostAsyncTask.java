@@ -12,7 +12,7 @@ import ru.sergeykamyshov.fivecards.utils.QueryUtils;
 /**
  * AsyncTask для загрузки конкретного id поста
  */
-public class PostAsyncTask extends AsyncTask<String, Void, List<CardType>> {
+public class PostAsyncTask extends AsyncTask<String, Void, CardType> {
 
     private CardViewAdapter mAdapter;
 
@@ -21,18 +21,18 @@ public class PostAsyncTask extends AsyncTask<String, Void, List<CardType>> {
     }
 
     @Override
-    protected List<CardType> doInBackground(String... params) {
+    protected CardType doInBackground(String... params) {
         String postNumber = params[0];
         return QueryUtils.fetchCardTypeData(QueryUtils.POST_TYPE, postNumber);
     }
 
     @Override
-    protected void onPostExecute(List<CardType> cardTypes) {
+    protected void onPostExecute(CardType cardType) {
         // Удаляем старый тип карточки и добавляем новый
         List<CardType> newData = new ArrayList<>();
         newData.addAll(mAdapter.getData());
         newData.remove(0);
-        newData.add(0, cardTypes.get(0));
+        newData.add(0, cardType);
 
         mAdapter.updateData(newData);
     }
