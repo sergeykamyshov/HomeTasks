@@ -37,10 +37,23 @@ public class QueryUtils {
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
     private static final String HTTPS_REQUEST_URL = "https://jsonplaceholder.typicode.com";
 
+    /**
+     * Получает данные от сервера и возращает в указанном типе карточки
+     *
+     * @param type - запрашиваемый тип карточки
+     * @return тип карточки
+     */
     public static CardType fetchCardTypeData(String type) {
         return fetchCardTypeData(type, null);
     }
 
+    /**
+     * Получает данные от сервера и возращает в указанном типе карточки
+     *
+     * @param type - запрашиваемый тип карточки
+     * @param id   - id поста или комментария
+     * @return тип карточки
+     */
     public static CardType fetchCardTypeData(String type, String id) {
         URL url = createUrl(type, id);
         String jsonResult = makeHttpRequest(url, type);

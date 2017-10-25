@@ -60,10 +60,8 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case VIEW_TYPE_TODO:
                 View todoView = LayoutInflater.from(mContext).inflate(R.layout.todo_item_layout, parent, false);
                 return new TodoTypeHolder(todoView);
-            default:
-                View defaultView = LayoutInflater.from(mContext).inflate(R.layout.card_item, parent, false);
-                return new CardHolder(defaultView);
         }
+        return null;
     }
 
     @Override
@@ -124,8 +122,6 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 TodoType todoType = (TodoType) mData.get(position);
                 todoTypeHolder.mTitle.setText(todoType.getTitle());
                 todoTypeHolder.mCompleted.setChecked(todoType.isCompleted());
-                break;
-            default:
                 break;
         }
     }
@@ -241,15 +237,6 @@ public class CardViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(todoView);
             mTitle = todoView.findViewById(R.id.text_todo_title);
             mCompleted = todoView.findViewById(R.id.checkbox_todo_completed);
-        }
-    }
-
-    private static class CardHolder extends RecyclerView.ViewHolder {
-        TextView mTextView;
-
-        public CardHolder(View itemView) {
-            super(itemView);
-            mTextView = itemView.findViewById(R.id.text_card_title);
         }
     }
 }
