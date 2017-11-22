@@ -10,10 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.sergeykamyshov.imgurclient.R;
+import ru.sergeykamyshov.imgurclient.adapters.ImagesRecyclerAdapter;
 
 public class ImagesFragment extends Fragment {
 
     public static final int SPAN_COUNT = 2;
+
+    public static ImagesFragment newInstance() {
+        return new ImagesFragment();
+    }
 
     @Nullable
     @Override
@@ -23,6 +28,9 @@ public class ImagesFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_images);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL));
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        ImagesRecyclerAdapter recyclerAdapter = new ImagesRecyclerAdapter(getContext());
+        recyclerView.setAdapter(recyclerAdapter);
+
+        return view;
     }
 }

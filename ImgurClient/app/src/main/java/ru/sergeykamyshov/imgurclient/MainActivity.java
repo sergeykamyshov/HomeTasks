@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(new ImagesFragment(), "imagesFragment")
+                .replace(R.id.frame_content, ImagesFragment.newInstance())
                 .commit();
     }
 }
