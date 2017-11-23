@@ -7,12 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import ru.sergeykamyshov.imgurclient.R;
 
 public class ImagesRecyclerAdapter extends RecyclerView.Adapter<ImagesRecyclerAdapter.ImagesHolder> {
 
     Context mContext;
     private int[] mTestImages = {R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four, R.drawable.five,
+            R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four, R.drawable.five,
+            R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four, R.drawable.five,
             R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four, R.drawable.five};
 
     public ImagesRecyclerAdapter(Context context) {
@@ -27,7 +31,7 @@ public class ImagesRecyclerAdapter extends RecyclerView.Adapter<ImagesRecyclerAd
 
     @Override
     public void onBindViewHolder(ImagesHolder holder, int position) {
-        holder.mImageView.setImageResource(mTestImages[position]);
+        Glide.with(mContext).load(mTestImages[position]).into(holder.mImageView);
     }
 
     @Override
